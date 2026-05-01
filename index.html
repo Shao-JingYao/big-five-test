@@ -734,10 +734,9 @@ ${profile}`;
   }).then(data => {
     usage.n++;
     localStorage.setItem('_au', JSON.stringify(usage));
-    const poem = data.choices[0].message.content.trim().replace(/\n/g, '<br>');
+    const poem = data.choices[0].message.content.trim();
     resultDiv.innerHTML = `
-      <div class="poem">${poem}</div>
-      <div class="poem-author">—— DeepSeek V3</div>
+      <div class="poem">${poem.replace(/\n/g, '<br>')}</div>
     `;
     resultDiv.classList.add('show');
     spinner.classList.remove('show');
