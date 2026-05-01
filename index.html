@@ -683,6 +683,9 @@ function showResults() {
   });
 
   document.getElementById('screen-results').scrollIntoView({ behavior:'smooth' });
+
+  // Auto-generate poem after a short delay
+  setTimeout(generateAI, 800);
 }
 
 // ---- Restart ----
@@ -744,8 +747,13 @@ function generateAI() {
     return `${DIM_NAMES[d].emoji}${DIM_NAMES[d].cn}(${DIM_NAMES[d].en}): ${scores[d]}/5.0 — ${tier.label}`;
   }).join('\n');
 
-  const prompt = `根据以下大五人格分数创作七言律诗（8句），前6句画像后2句建言，押韵。只输出诗，不要说明。
+  const prompt = `根据大五人格分数创作七言律诗（8句），要求：
+- 前6句：每句对应一个维度特质，用自然意象隐喻（如山、海、云、松、风、月、舟等），忌直白说教
+- 后2句：转为恳切的个人建言，如长者叮咛，有力度亦有温度
+- 严格押平声韵（一韵到底），对仗工整，格调典雅
+- 只输出诗，一行一句，不加标点符号外的任何文字
 
+分数如下：
 ${profile}`;
 
   // Decode embedded key
@@ -758,7 +766,7 @@ ${profile}`;
     body: JSON.stringify({
       model: 'deepseek-chat',
       messages: [
-        { role: 'system', content: '你是心理学诗人。根据大五人格分数创作七言律诗（8句），前6句画像后2句建言，押韵。只输出诗。' },
+        { role: 'system', content: '你是一位古典诗词大师，精通唐诗格律与意象。你的七言律诗讲究平仄对仗、意象交融、含蓄蕴藉、尾联升华。' },
         { role: 'user', content: prompt }
       ],
       temperature: 0.9, max_tokens: 200
