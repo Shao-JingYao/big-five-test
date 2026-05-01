@@ -4,36 +4,41 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>大五维人格测评 · Big Five (OCEAN)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <style>
   :root {
-    --bg: #0f0f1a;
-    --card: #1a1a2e;
-    --text: #e0e0e0;
-    --muted: #8888aa;
-    --accent: #6c63ff;
-    --accent2: #00d4aa;
-    --danger: #ff6b6b;
-    --o-color: #ff6b9d;
-    --c-color: #4ecdc4;
-    --e-color: #ffe66d;
-    --a-color: #a29bfe;
-    --n-color: #fd79a8;
-    --radius: 16px;
-    --shadow: 0 4px 24px rgba(0,0,0,.4);
+    --bg: #f8f4ed;
+    --card: #fefcf7;
+    --text: #2c2416;
+    --muted: #8b8172;
+    --accent: #b5342e;
+    --accent2: #3a5a5a;
+    --danger: #b5342e;
+    --o-color: #5a4a3a;
+    --c-color: #3a5a5a;
+    --e-color: #6b4e3d;
+    --a-color: #4a6b5a;
+    --n-color: #7a4a4a;
+    --radius: 4px;
+    --shadow: 0 2px 16px rgba(44,36,22,.08);
+    --ink-border: #d4cdbc;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei', sans-serif;
+    font-family: 'Noto Serif SC', 'STSong', 'SimSun', 'Songti SC', serif;
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: center;
-    padding: 20px;
-    background-image: radial-gradient(ellipse at top, rgba(108,99,255,.12), transparent 50%),
-                      radial-gradient(ellipse at bottom right, rgba(0,212,170,.08), transparent 50%);
+    align-items: flex-start;
+    padding: 40px 20px;
+    background-image: 
+      radial-gradient(ellipse at 50% 0%, rgba(181,52,46,.04), transparent 60%),
+      radial-gradient(ellipse at 80% 100%, rgba(58,90,90,.03), transparent 50%);
   }
   .container {
     width: 100%;
@@ -42,24 +47,25 @@
   .card {
     background: var(--card);
     border-radius: var(--radius);
-    padding: 40px 36px;
+    padding: 48px 40px;
     box-shadow: var(--shadow);
-    border: 1px solid rgba(255,255,255,.06);
+    border: 1px solid var(--ink-border);
   }
   h1 {
-    font-size: 2rem;
+    font-family: 'Ma Shan Zheng', 'STKaiti', 'KaiTi', 'Kaiti SC', cursive;
+    font-size: 2.4rem;
     text-align: center;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--text);
     margin-bottom: 8px;
+    font-weight: 400;
+    letter-spacing: .05em;
   }
   .subtitle {
     text-align: center;
     color: var(--muted);
     font-size: .9rem;
-    margin-bottom: 32px;
+    margin-bottom: 36px;
+    letter-spacing: .08em;
   }
   .intro-text {
     color: var(--muted);
@@ -74,40 +80,57 @@
     margin-bottom: 28px;
   }
   .trait-chip {
-    background: rgba(255,255,255,.04);
-    border: 1px solid rgba(255,255,255,.08);
-    border-radius: 12px;
-    padding: 14px 12px;
+    background: var(--card);
+    border: 1px solid var(--ink-border);
+    border-radius: 2px;
+    padding: 16px 12px;
     text-align: center;
     font-size: .82rem;
+    position: relative;
+  }
+  .trait-chip::after {
+    content: '';
+    position: absolute;
+    right: 8px; top: 8px;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid var(--accent);
+    opacity: .4;
   }
   .trait-chip .emoji { font-size: 1.4rem; display:block; margin-bottom: 6px; }
   .trait-chip .label { font-weight: 600; display:block; margin-bottom:2px; }
   .trait-chip .en   { font-size: .72rem; color: var(--muted); }
   .btn {
     display: inline-block;
-    padding: 14px 40px;
-    border: none;
-    border-radius: 50px;
-    font-size: 1rem;
-    font-weight: 600;
+    padding: 12px 36px;
+    border: 1px solid var(--text);
+    border-radius: 2px;
+    font-size: .95rem;
+    font-weight: 400;
     cursor: pointer;
     transition: all .25s;
     text-decoration: none;
+    background: transparent;
+    color: var(--text);
+    font-family: inherit;
+    letter-spacing: .04em;
   }
   .btn-primary {
-    background: linear-gradient(135deg, var(--accent), #7c6ff7);
-    color: #fff;
-    box-shadow: 0 4px 16px rgba(108,99,255,.35);
+    background: var(--text);
+    color: var(--card);
+    border-color: var(--text);
   }
   .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 24px rgba(108,99,255,.5);
+    background: var(--accent);
+    border-color: var(--accent);
   }
   .btn-secondary {
-    background: rgba(255,255,255,.06);
+    border-color: var(--ink-border);
+    color: var(--muted);
+  }
+  .btn-secondary:hover {
+    border-color: var(--text);
     color: var(--text);
-    border: 1px solid rgba(255,255,255,.12);
   }
   .btn-sm {
     padding: 10px 24px;
@@ -118,37 +141,37 @@
     margin-bottom: 24px;
   }
   .progress-bar-bg {
-    height: 6px;
-    background: rgba(255,255,255,.06);
-    border-radius: 3px;
+    height: 2px;
+    background: var(--ink-border);
+    border-radius: 0;
     overflow: hidden;
   }
   .progress-bar-fg {
     height: 100%;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-    border-radius: 3px;
+    background: var(--text);
+    border-radius: 0;
     transition: width .4s ease;
   }
   .progress-text {
     text-align: right;
     font-size: .78rem;
     color: var(--muted);
-    margin-top: 6px;
+    margin-top: 8px;
   }
   .dimension-label {
     font-size: .82rem;
     color: var(--muted);
-    margin-bottom: 8px;
-    padding: 6px 14px;
-    border-radius: 20px;
+    margin-bottom: 16px;
+    padding: 4px 0;
     display: inline-block;
-    background: rgba(255,255,255,.04);
+    letter-spacing: .06em;
   }
   .question-text {
-    font-size: 1.15rem;
-    line-height: 1.6;
-    margin-bottom: 28px;
+    font-size: 1.2rem;
+    line-height: 1.8;
+    margin-bottom: 32px;
     min-height: 52px;
+    color: var(--text);
   }
   .likert {
     display: flex;
@@ -158,30 +181,32 @@
   }
   .likert-btn {
     flex: 1;
-    padding: 12px 4px;
-    border-radius: 12px;
-    border: 2px solid rgba(255,255,255,.1);
+    padding: 14px 4px;
+    border-radius: 2px;
+    border: 1px solid var(--ink-border);
     background: transparent;
     color: var(--muted);
     cursor: pointer;
     font-size: .82rem;
     transition: all .2s;
     text-align: center;
+    font-family: inherit;
   }
   .likert-btn:hover {
-    border-color: var(--accent);
+    border-color: var(--text);
     color: var(--text);
   }
   .likert-btn.selected {
-    background: rgba(108,99,255,.15);
-    border-color: var(--accent);
-    color: #fff;
+    background: var(--text);
+    border-color: var(--text);
+    color: var(--card);
     font-weight: 600;
   }
   .nav-btns {
     display: flex;
     justify-content: space-between;
     gap: 12px;
+    margin-top: 4px;
   }
   /* Results */
   .results-header {
@@ -189,38 +214,32 @@
     margin-bottom: 32px;
   }
   .results-header h2 {
-    font-size: 1.5rem;
+    font-family: 'Ma Shan Zheng', 'STKaiti', 'KaiTi', 'Kaiti SC', cursive;
+    font-size: 1.8rem;
     margin-bottom: 6px;
-  }
-  .charts-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    margin-bottom: 32px;
-  }
-  @media (max-width: 560px) {
-    .charts-row { grid-template-columns: 1fr; }
+    font-weight: 400;
   }
   .chart-box {
-    background: rgba(255,255,255,.03);
+    background: var(--card);
     border-radius: var(--radius);
-    padding: 20px;
-    border: 1px solid rgba(255,255,255,.06);
-    position: relative;
-    min-height: 260px;
+    padding: 24px;
+    border: 1px solid var(--ink-border);
+    max-width: 420px;
+    margin: 0 auto 32px;
   }
-  .chart-box canvas { max-height: 260px; }
+  .chart-box canvas { max-height: 320px; }
   .trait-detail {
-    margin-bottom: 24px;
-    padding: 18px;
-    border-radius: var(--radius);
-    background: rgba(255,255,255,.03);
-    border: 1px solid rgba(255,255,255,.06);
-    border-left: 4px solid;
+    margin-bottom: 20px;
+    padding: 20px 24px;
+    border-radius: 0;
+    background: var(--card);
+    border: 1px solid var(--ink-border);
+    border-left: 3px solid;
   }
   .trait-detail h3 {
     font-size: 1.05rem;
     margin-bottom: 4px;
+    font-weight: 600;
   }
   .trait-detail .score-label {
     font-size: .82rem;
@@ -229,51 +248,124 @@
   }
   .trait-detail .desc {
     font-size: .88rem;
-    line-height: 1.7;
+    line-height: 1.8;
     color: var(--muted);
   }
   .score-bar-wrap {
-    height: 6px;
-    background: rgba(255,255,255,.08);
-    border-radius: 3px;
-    margin: 10px 0;
+    height: 3px;
+    background: var(--ink-border);
+    border-radius: 0;
+    margin: 12px 0;
     overflow: hidden;
   }
   .score-bar-fill {
     height: 100%;
-    border-radius: 3px;
+    border-radius: 0;
     transition: width .8s ease;
   }
   .footer-actions {
     text-align: center;
     display: flex;
-    gap: 12px;
+    gap: 16px;
     justify-content: center;
     flex-wrap: wrap;
   }
   .hidden { display: none !important; }
-  .fade-in { animation: fadeIn .4s ease; }
-  @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+  .fade-in { animation: fadeIn .5s ease; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+
+  /* ===== 水墨渲染层 ===== */
+  /* 宣纸纹理 */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
+    opacity: .6;
+  }
+  .container { position: relative; z-index: 1; }
+
+  /* 淡墨笔触装饰 — 欢迎页 */
+  .card {
+    position: relative;
+  }
+  #screen-welcome::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: 20px; right: 20px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(44,36,22,.15), transparent);
+  }
+  #screen-welcome::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 20px; right: 20px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(44,36,22,.1), transparent);
+  }
+
+  /* 印章点缀 — trait chip */
+  .trait-chip::after {
+    content: '';
+    position: absolute;
+    right: 10px; top: 10px;
+    width: 16px; height: 16px;
+    border: 1.5px solid var(--accent);
+    opacity: .35;
+    transform: rotate(15deg);
+  }
+
+  /* 墨韵 hover */
+  .likert-btn:hover { background: rgba(44,36,22,.04); }
+  .likert-btn:active { background: rgba(44,36,22,.08); }
+
+  /* 结果页印章装饰 */
+  .results-header h2 {
+    position: relative;
+  }
+  .results-header h2::after {
+    content: '';
+    display: block;
+    width: 40px; height: 2px;
+    background: var(--accent);
+    margin: 12px auto 0;
+    opacity: .5;
+  }
+
+  /* 中等评语分隔 */
+  .trait-detail { transition: border-left-color .3s; }
+
+  /* 响应式微调 */
+  @media (max-width: 560px) {
+    .card { padding: 32px 20px; }
+    h1 { font-size: 1.8rem; }
+    .likert { flex-wrap: wrap; }
+    .likert-btn { min-width: 100%; }
+    .chart-box { max-width: 100%; }
+  }
 </style>
 </head>
 <body>
 <div class="container" id="app">
   <!-- ========== WELCOME SCREEN ========== -->
   <div class="card fade-in" id="screen-welcome">
-    <h1>🧠 大五维人格测评</h1>
-    <p class="subtitle">Big Five Personality Test · OCEAN Model</p>
+    <h1>大五维人格测评</h1>
+    <p class="subtitle">Big Five · OCEAN Model</p>
     <div class="intro-text">
-      大五人格模型是目前心理学界最广泛认可的人格理论框架，将人格归纳为五个核心维度。本测试包含 <strong>50 道题目</strong>，预计耗时 <strong>5-8 分钟</strong>。请根据您的真实感受作答，没有对错之分。
+      大五人格模型是当代心理学界最具共识的人格理论框架，将人格归纳为五个核心维度。本测试包含 <strong>50 道题目</strong>，预计耗时 <strong>5-8 分钟</strong>。请根据您的真实感受作答，无对错之分。
     </div>
     <div class="trait-grid">
-      <div class="trait-chip"><span class="emoji">🎨</span><span class="label">开放性</span><span class="en">Openness</span></div>
-      <div class="trait-chip"><span class="emoji">🎯</span><span class="label">尽责性</span><span class="en">Conscientiousness</span></div>
-      <div class="trait-chip"><span class="emoji">🎤</span><span class="label">外向性</span><span class="en">Extraversion</span></div>
-      <div class="trait-chip"><span class="emoji">🤝</span><span class="label">宜人性</span><span class="en">Agreeableness</span></div>
-      <div class="trait-chip"><span class="emoji">🌊</span><span class="label">神经质</span><span class="en">Neuroticism</span></div>
+      <div class="trait-chip"><span class="emoji">✦</span><span class="label">开放性</span><span class="en">Openness</span></div>
+      <div class="trait-chip"><span class="emoji">◆</span><span class="label">尽责性</span><span class="en">Conscientiousness</span></div>
+      <div class="trait-chip"><span class="emoji">◈</span><span class="label">外向性</span><span class="en">Extraversion</span></div>
+      <div class="trait-chip"><span class="emoji">❖</span><span class="label">宜人性</span><span class="en">Agreeableness</span></div>
+      <div class="trait-chip"><span class="emoji">◉</span><span class="label">神经质</span><span class="en">Neuroticism</span></div>
     </div>
     <div class="btn-center">
-      <button class="btn btn-primary" onclick="startTest()">开始测评 →</button>
+      <button class="btn btn-primary" onclick="startTest()">开始测评</button>
     </div>
   </div>
 
@@ -289,24 +381,21 @@
     <div class="nav-btns">
       <button class="btn btn-secondary btn-sm" id="btn-prev" onclick="prevQuestion()">← 上一题</button>
       <span id="nav-spacer"></span>
-      <button class="btn btn-primary btn-sm" id="btn-next" onclick="nextQuestion()" disabled>下一题 →</button>
+      <button class="btn btn-primary btn-sm" id="btn-next" onclick="nextQuestion()" disabled>下一题</button>
     </div>
   </div>
 
   <!-- ========== RESULTS SCREEN ========== -->
   <div class="card hidden" id="screen-results">
     <div class="results-header">
-      <h2>📊 您的测评结果</h2>
+      <h2>测评结果</h2>
       <p class="subtitle">大五人格剖面图</p>
     </div>
-    <div class="charts-row">
-      <div class="chart-box"><canvas id="radarChart"></canvas></div>
-      <div class="chart-box"><canvas id="barChart"></canvas></div>
-    </div>
+    <div class="chart-box"><canvas id="radarChart"></canvas></div>
     <div id="trait-details"></div>
     <div class="footer-actions">
-      <button class="btn btn-primary btn-sm" onclick="restartTest()">🔄 重新测评</button>
-      <button class="btn btn-secondary btn-sm" onclick="shareResult()">📋 复制结果</button>
+      <button class="btn btn-primary btn-sm" onclick="restartTest()">重新测评</button>
+      <button class="btn btn-secondary btn-sm" onclick="shareResult()">复制结果</button>
     </div>
   </div>
 </div>
@@ -379,33 +468,33 @@ const questions = [
 ];
 
 const DIM_NAMES = {
-  O: { cn:"开放性", en:"Openness", emoji:"🎨", color:"#ff6b9d", low:"保守传统", high:"开放创新" },
-  C: { cn:"尽责性", en:"Conscientiousness", emoji:"🎯", color:"#4ecdc4", low:"随性灵活", high:"自律严谨" },
-  E: { cn:"外向性", en:"Extraversion", emoji:"🎤", color:"#ffe66d", low:"内向沉静", high:"外向活跃" },
-  A: { cn:"宜人性", en:"Agreeableness", emoji:"🤝", color:"#a29bfe", low:"理性独立", high:"温暖合作" },
-  N: { cn:"神经质", en:"Neuroticism", emoji:"🌊", color:"#fd79a8", low:"情绪稳定", high:"敏感波动" },
+  O: { cn:"开放性", en:"Openness", emoji:"✦", color:"#5a4a3a", low:"保守传统", high:"开放创新" },
+  C: { cn:"尽责性", en:"Conscientiousness", emoji:"◆", color:"#3a5a5a", low:"随性灵活", high:"自律严谨" },
+  E: { cn:"外向性", en:"Extraversion", emoji:"◈", color:"#6b4e3d", low:"内向沉静", high:"外向活跃" },
+  A: { cn:"宜人性", en:"Agreeableness", emoji:"❖", color:"#4a6b5a", low:"理性独立", high:"温暖合作" },
+  N: { cn:"神经质", en:"Neuroticism", emoji:"◉", color:"#7a4a4a", low:"情绪稳定", high:"敏感波动" },
 };
 
 const DESC = {
   O: {
-    high: "您具有高度的开放性，热爱探索未知领域，充满好奇心和创造力。您欣赏艺术之美，乐于接受新观念，思维灵活而广阔。您可能喜欢旅行、阅读、学习新技能，对抽象概念和哲学问题有浓厚兴趣。",
-    low: "您的开放性较低，更偏好熟悉和稳定的事物。您务实、传统，注重具体事实而非抽象理论。您在有明确规则和既定流程的环境中感到最舒适，不喜欢频繁的变化和不确定的冒险。"
+    high: "您在开放性维度上得分较高，体现出强烈的认知需求（Need for Cognition）与审美敏感性。您倾向于主动寻求新异体验，对抽象观念与复杂问题保持开放态度。Costa & McCrae 的研究表明，高开放性个体在创造力测验中表现更优，且更少持有刻板印象。您可能享受智力探索、艺术鉴赏与文化沉浸。",
+    low: "您在开放性维度上得分较低，偏好熟悉、可预测的环境与务实的思维方式。这并非认知局限——研究表明，低开放性者往往在执行功能与规则遵循任务上更具优势。您重视传统、秩序与具体经验，在需要稳定输出和精准执行的领域中表现突出。"
   },
   C: {
-    high: "您具有高度的尽责性，做事有条理、自律性强。您善于制定计划并坚持执行，注重细节和品质。您值得信赖，在工作和学习中通常表现优异，能够延迟满足以实现长期目标。",
-    low: "您的尽责性较低，更倾向于随性灵活的生活方式。您可能不太喜欢严格的计划和规则，更善于适应变化和即兴发挥。您在轻松自由的环境中能发挥出最佳状态。"
+    high: "您在尽责性维度上得分较高，体现出较强的自我调节能力（Self-Regulation）与成就导向。Barrick & Mount 的元分析表明，尽责性是预测工作绩效最稳定的人格维度。您善于规划、延迟满足，能够为了长期目标而克制短期冲动。您的可靠性与条理性使您在团队中常常承担关键角色。",
+    low: "您的尽责性得分较低，反映了更灵活、即兴的行为风格。这并不等同于懒惰——低尽责性者在需要快速适应变化的环境中往往表现更佳，其行为激活系统（BAS）更为敏感。您可能在创造性解决问题和应对突发情境时展现出独特的优势。"
   },
   E: {
-    high: "您具有高度的外向性，喜欢与人交往，在社交场合中精力充沛。您热情、健谈、擅长活跃气氛。您乐于成为关注的焦点，喜欢快节奏的生活和新鲜的社交体验。",
-    low: "您偏向内向，更喜欢独处或小范围的深入交流。您在安静的环境中感到最舒适，善于深度思考和细致观察。您不追求热闹的社交，但在亲密关系中有深刻的连接。"
+    high: "您在外向性维度上得分较高，体现出较强的奖赏敏感性（Reward Sensitivity）。Eysenck 的皮质唤醒理论认为，外向者的基线皮层唤醒水平较低，因而更主动寻求社交刺激以达到最佳唤醒。您从人际互动中获得能量，善于建立广泛的社交网络，在需要表达与影响力的场合中如鱼得水。",
+    low: "您在外向性维度上得分较低，偏向内倾。这不等同于社交能力的缺失——Jung 将内倾定义为能量向内流动，内向者在深度思考、精细加工和独处创造上具有天然优势。您偏好有深度的少人数交流，在需要持续专注和独立判断的任务中往往表现出色。"
   },
   A: {
-    high: "您具有高度的宜人性，温暖、善良、富有同情心。您乐于助人、信任他人，善于合作与妥协。您在团队中通常是润滑剂般的角色，能够敏锐感知他人的情绪和需要。",
-    low: "您的宜人性较低，更倾向于独立思考和理性判断。您敢于表达不同意见，在竞争中不轻易妥协。您在需要客观分析和坚定决策的场合中表现出色。"
+    high: "您在宜人性维度上得分较高，体现出高度的共情能力（Empathy）与合作倾向。Graziano 等人的研究指出，高宜人性者更倾向于采用建设性的冲突解决策略，其观点采择能力更强。您重视人际和谐，善于体察他人情绪，在需要协作与关怀的领域中能够发挥独特价值。",
+    low: "您的宜人性得分较低，体现出更强的独立判断力与竞争意识。低宜人性并非攻击性——研究表明，适度保留质疑态度的人在谈判、决策和科学辩论中往往更具优势。您敢于表达异见，不易被群体压力左右，在需要批判性思维和坚定立场的场合中表现突出。"
   },
   N: {
-    high: "您的神经质（情绪敏感性）较高，情绪体验丰富而深刻。您对压力和威胁更加敏感，容易产生焦虑或担忧。您的敏感也让您有更强的共情能力和对细节的觉察力。",
-    low: "您的情绪稳定性很高，面对压力时能保持从容冷静。您心态平和、自信乐观，不容易被负面情绪困扰。您在高压环境下依然能够保持良好状态，具有出色的心理韧性。"
+    high: "您在神经质维度上得分较高，情绪体验深刻且反应敏锐。这反映出边缘系统的高度活跃——高神经质者对威胁信号和负面刺激的探测阈值更低。然而，这种敏感也带来更强的内省能力和审美深度。研究表明，适度情绪敏感性在创造性工作中具有适应性价值。",
+    low: "您在神经质维度上得分较低，情绪稳定性出色。这体现出较强的心理韧性（Psychological Resilience）与情绪调节能力。低神经质者面对压力时能够维持前额叶的执行控制，不容易被焦虑或负面情绪干扰。这种稳定性使您在高压决策和长期项目中保持良好状态。"
   }
 };
 
@@ -458,7 +547,7 @@ function renderQuestion() {
   const nextBtn = document.getElementById('btn-next');
   if (answers[currentIdx] !== null) {
     nextBtn.disabled = false;
-    nextBtn.textContent = currentIdx === questions.length-1 ? '查看结果 ✨' : '下一题 →';
+    nextBtn.textContent = currentIdx === questions.length-1 ? '查看结果' : '下一题';
   } else {
     nextBtn.disabled = true;
     nextBtn.textContent = '请先选择答案';
@@ -514,7 +603,7 @@ function showResults() {
   const scores = calcScores();
   const dims = ['O','C','E','A','N'];
 
-  // Radar chart
+  // Radar chart — ink wash style
   const rCtx = document.getElementById('radarChart').getContext('2d');
   if (window._radar) window._radar.destroy();
   window._radar = new Chart(rCtx, {
@@ -524,47 +613,27 @@ function showResults() {
       datasets: [{
         label: '您的分数',
         data: dims.map(d => scores[d]),
-        backgroundColor: 'rgba(108,99,255,.2)',
-        borderColor: 'rgba(108,99,255,.8)',
-        borderWidth: 2,
+        backgroundColor: 'rgba(44,36,22,.08)',
+        borderColor: 'rgba(44,36,22,.7)',
+        borderWidth: 1.5,
         pointBackgroundColor: dims.map(d => DIM_NAMES[d].color),
-        pointBorderColor: '#fff',
-        pointRadius: 5,
+        pointBorderColor: '#fefcf7',
+        pointBorderWidth: 1.5,
+        pointRadius: 4,
+        tension: 0.1,
       }]
     },
     options: {
       responsive: true,
       maintainAspectRatio: true,
-      scales: { r: { min:1, max:5, ticks:{stepSize:1,color:'#8888aa',backdropColor:'transparent'}, grid:{color:'rgba(255,255,255,.1)'}, pointLabels:{color:'#e0e0e0',font:{size:12}} } },
+      scales: { r: {
+        min:1, max:5,
+        ticks: { stepSize:1, color:'#8b8172', backdropColor:'transparent', font:{size:10} },
+        grid: { color:'rgba(44,36,22,.12)' },
+        pointLabels: { color:'#2c2416', font:{size:12, family:"'Noto Serif SC', serif"} },
+        angleLines: { color:'rgba(44,36,22,.1)' }
+      }},
       plugins: { legend: { display: false } }
-    }
-  });
-
-  // Bar chart
-  const bCtx = document.getElementById('barChart').getContext('2d');
-  if (window._bar) window._bar.destroy();
-  window._bar = new Chart(bCtx, {
-    type: 'bar',
-    data: {
-      labels: dims.map(d => DIM_NAMES[d].cn),
-      datasets: [{
-        label: '得分',
-        data: dims.map(d => scores[d]),
-        backgroundColor: dims.map(d => DIM_NAMES[d].color + '99'),
-        borderColor: dims.map(d => DIM_NAMES[d].color),
-        borderWidth: 2,
-        borderRadius: 8,
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: true,
-      indexAxis: 'y',
-      scales: {
-        x: { min:1, max:5, ticks:{color:'#8888aa'}, grid:{color:'rgba(255,255,255,.08)'} },
-        y: { ticks:{color:'#e0e0e0',font:{size:13}}, grid:{display:false} }
-      },
-      plugins: { legend: { display:false } }
     }
   });
 
@@ -575,7 +644,7 @@ function showResults() {
     const info = DIM_NAMES[d];
     const score = scores[d];
     const level = pctToLabel(score);
-    const descText = level === '高' ? DESC[d].high : (level === '低' ? DESC[d].low : '您的' + info.cn + '处于中等水平，兼具两端的特质。');
+    const descText = level === '高' ? DESC[d].high : (level === '低' ? DESC[d].low : '您在' + info.cn + '维度上处于中等水平，这意味着您的行为模式在不同情境中具有弹性——既不极端偏向某一端，也非简单的折中。这种均衡性使您能够根据具体情境灵活调用不同的应对策略，体现出良好的人格适应性。');
     const barPct = ((score-1)/4*100).toFixed(0);
     det.innerHTML += `
       <div class="trait-detail" style="border-left-color:${info.color}">
@@ -604,11 +673,11 @@ function restartTest() {
 function shareResult() {
   const scores = calcScores();
   const dims = ['O','C','E','A','N'];
-  let text = '🧠 我的大五人格测评结果：\n\n';
+  let text = '我的大五人格测评结果：\n\n';
   dims.forEach(d => {
     text += DIM_NAMES[d].emoji + ' ' + DIM_NAMES[d].cn + ': ' + scores[d] + '/5.0\n';
   });
-  text += '\n你也来测测吧！';
+  text += '\n您也来测测吧！';
   navigator.clipboard.writeText(text).then(() => {
     alert('结果已复制到剪贴板！');
   }).catch(() => {
