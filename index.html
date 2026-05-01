@@ -145,7 +145,6 @@
     <div class="likert" id="likert-group"></div>
     <div class="nav-btns">
       <button class="btn btn-secondary btn-sm" id="btn-prev" onclick="prevQuestion()">← 上一题</button>
-      <span id="nav-spacer"></span>
       <button class="btn btn-primary btn-sm" id="btn-next" onclick="nextQuestion()" disabled>下一题</button>
     </div>
   </div>
@@ -190,11 +189,11 @@ function renderQ(){
   });
   document.getElementById('progress-bar').style.width=((cur+1)/Q.length*100).toFixed(0)+'%';
   document.getElementById('progress-text').textContent=(cur+1)+' / '+Q.length;
-  document.getElementById('btn-prev').style.visibility=cur===0?'hidden':'visible';
+  document.getElementById('btn-prev').style.display=cur===0?'none':'';
   const nb=document.getElementById('btn-next');
   if(ans[cur]!==null){nb.disabled=false;nb.textContent=cur===Q.length-1?'查看结果':'下一题';}
   else{nb.disabled=true;nb.textContent='请先选择答案';}
-  document.getElementById('nav-spacer').style.display=cur===0?'none':'inline';
+  document.querySelector('.nav-btns').style.justifyContent=cur===0?'center':'space-between';
 }
 function nextQuestion(){if(ans[cur]===null)return;if(cur<Q.length-1){cur++;renderQ();document.getElementById('screen-test').scrollIntoView({behavior:'smooth'});}else showResults();}
 function prevQuestion(){if(cur>0){cur--;renderQ();}}
