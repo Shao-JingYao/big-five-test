@@ -321,6 +321,35 @@
   .spinner.show { display: inline-block; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
+  /* 印章复制键 */
+  .seal-copy {
+    display: none;
+    width: 52px; height: 52px;
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    font-family: 'Ma Shan Zheng', 'STKaiti', 'KaiTi', cursive;
+    font-size: 1rem;
+    text-align: center;
+    line-height: 48px;
+    cursor: pointer;
+    background: transparent;
+    transform: rotate(-6deg);
+    transition: all .35s ease;
+    position: absolute;
+    right: 20px; bottom: 16px;
+    opacity: .5;
+    user-select: none;
+    letter-spacing: .04em;
+  }
+  .seal-copy.show { display: block; }
+  .seal-copy:hover {
+    opacity: .85;
+    transform: rotate(-3deg) scale(1.06);
+    border-color: var(--text);
+    color: var(--text);
+  }
+  .ai-result { position: relative; }
+
   @media (max-width: 560px) {
     .card { padding: 32px 20px; }
     h1 { font-size: 1.8rem; }
@@ -380,7 +409,6 @@
     </div>
     <div class="footer-actions">
       <button class="btn btn-primary btn-sm" onclick="restartTest()">重新测评</button>
-      <button class="btn btn-secondary btn-sm" onclick="shareResult()">复制结果</button>
     </div>
   </div>
 </div>
@@ -503,6 +531,7 @@ const DESC = {
 
 // ---- State ----
 let currentIdx = 0;
+let _poemText = '';
 const answers = new Array(questions.length).fill(null);
 
 function startTest() {
@@ -664,16 +693,22 @@ function restartTest() {
 function shareResult() {
   const scores = calcScores();
   const dims = ['O','C','E','A','N'];
-  let text = '我的大五人格测评结果：\n\n';
+  let text = '大五人格测评结果\n\n';
   dims.forEach(d => {
-    text += DIM_NAMES[d].emoji + ' ' + DIM_NAMES[d].cn + ': ' + scores[d] + '/5.0\n';
+    const tier = scoreToTier(scores[d]);
+    const info = DIM_NAMES[d];
+    text += `${info.emoji} ${info.cn}：${scores[d]}/5.0  ${tier.label}\n`;
+    text += `   ${DESC[d][tier.key]}\n\n`;
   });
-  text += '\n您也来测测吧！';
+  if (_poemText) {
+    text += '——— 诗意解读 ———\n';
+    text += _poemText + '\n\n';
+  }
+  text += '再测一次：https://shao-jingyao.github.io/big-five-test/';
   navigator.clipboard.writeText(text).then(() => {
-    alert('结果已复制到剪贴板！');
-  }).catch(() => {
-    prompt('请手动复制结果：', text);
-  });
+    const btn = document.getElementById('seal-btn');
+    if (btn) { btn.style.opacity = '1'; setTimeout(() => { btn.style.opacity = ''; }, 1200); }
+  }).catch(() => {});
 }
 
 // ---- AI poem generation (embedded key, algorithmic fallback) ----
@@ -735,8 +770,10 @@ ${profile}`;
     usage.n++;
     localStorage.setItem('_au', JSON.stringify(usage));
     const poem = data.choices[0].message.content.trim();
+    _poemText = poem;
     resultDiv.innerHTML = `
       <div class="poem">${poem.replace(/\n/g, '<br>')}</div>
+      <button class="seal-copy show" id="seal-btn" onclick="shareResult()" title="钤印存念">存</button>
     `;
     resultDiv.classList.add('show');
     spinner.classList.remove('show');
