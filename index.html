@@ -10,173 +10,132 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <style>
   :root {
-    --bg: #f8f4ed;
-    --card: #fefcf7;
-    --text: #2c2416;
-    --muted: #8b8172;
-    --accent: #8b5e4b;
-    --o-color: #5a4a3a;
-    --c-color: #3a5a5a;
-    --e-color: #6b4e3d;
-    --a-color: #4a6b5a;
-    --n-color: #7a4a4a;
-    --ink-border: #d4cdbc;
+    --bg: #f8f4ed; --card: #fefcf7; --text: #2c2416; --muted: #8b8172;
+    --accent: #8b5e4b; --seal: #8b2a1f;
+    --o: #5a4a3a; --c: #3a5a5a; --e: #6b4e3d; --a: #4a6b5a; --n: #7a4a4a;
+    --ink: #d4cdbc; --φ: 1.618;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
   body {
-    font-family: 'Noto Serif SC', 'STSong', 'SimSun', 'Songti SC', serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    display: flex; justify-content: center; align-items: flex-start;
-    padding: 40px 20px;
+    font-family:'Noto Serif SC','STSong','SimSun',serif;
+    background:var(--bg); color:var(--text); min-height:100vh;
+    display:flex; justify-content:center; align-items:flex-start; padding:40px 20px;
     background-image:
       radial-gradient(ellipse at 50% 0%, rgba(139,94,75,.03), transparent 60%),
       radial-gradient(ellipse at 80% 100%, rgba(58,90,90,.03), transparent 50%);
   }
   .container { width:100%; max-width:720px; position:relative; z-index:1; }
   .card {
-    background: var(--card); border: 1px solid var(--ink-border);
-    border-radius: 4px; padding: 48px 40px; position: relative;
-    box-shadow: 0 1px 12px rgba(44,36,22,.06);
+    background:var(--card); border:1px solid var(--ink); border-radius:4px;
+    padding:48px 40px; position:relative; box-shadow:0 1px 12px rgba(44,36,22,.06);
   }
-
-  /* Typography */
-  h1 {
-    font-family: 'Ma Shan Zheng', 'STKaiti', 'KaiTi', cursive;
-    font-size:2.4rem; text-align:center; font-weight:400;
-    color:var(--text); margin-bottom:10px; letter-spacing:.06em;
-  }
+  h1 { font-family:'Ma Shan Zheng','STKaiti','KaiTi',cursive; font-size:2.4rem; text-align:center; font-weight:400; color:var(--text); margin-bottom:10px; letter-spacing:.06em; }
   .subtitle { text-align:center; color:var(--muted); font-size:.85rem; margin-bottom:36px; letter-spacing:.1em; }
   .intro-text { color:var(--muted); line-height:1.8; margin-bottom:28px; font-size:.95rem; }
-
-  /* Trait grid */
   .trait-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:12px; margin-bottom:28px; }
-  .trait-chip {
-    background:var(--card); border:1px solid var(--ink-border); border-radius:2px;
-    padding:16px 12px; text-align:center; font-size:.82rem; position:relative;
-  }
+  .trait-chip { background:var(--card); border:1px solid var(--ink); border-radius:2px; padding:16px 12px; text-align:center; font-size:.82rem; position:relative; overflow:hidden; }
   .trait-chip .emoji { font-size:1.4rem; display:block; margin-bottom:6px; }
   .trait-chip .label { font-weight:600; display:block; margin-bottom:2px; }
   .trait-chip .en { font-size:.72rem; color:var(--muted); }
 
   /* Buttons */
-  .btn {
-    display:inline-block; padding:11px 32px; border:1px solid var(--ink-border);
-    border-radius:3px; font-size:.92rem; cursor:pointer; transition:all .3s ease;
-    background:transparent; color:var(--muted); font-family:inherit; letter-spacing:.06em;
-  }
+  .btn { display:inline-block; padding:11px 32px; border:1px solid var(--ink); border-radius:3px; font-size:.92rem; cursor:pointer; transition:all .3s ease; background:transparent; color:var(--muted); font-family:inherit; letter-spacing:.06em; position:relative; overflow:hidden; }
   .btn-primary { background:var(--text); color:var(--card); border-color:var(--text); }
   .btn-primary:hover { background:#1a1510; border-color:#1a1510; }
   .btn-secondary:hover { border-color:var(--text); color:var(--text); background:rgba(44,36,22,.03); }
   .btn-sm { padding:8px 22px; font-size:.82rem; }
   .btn-center { text-align:center; margin-top:12px; }
 
-  /* Test screen */
+  /* Test */
   .progress-wrap { margin-bottom:24px; }
-  .progress-bar-bg { height:2px; background:var(--ink-border); overflow:hidden; }
+  .progress-bar-bg { height:2px; background:var(--ink); overflow:hidden; }
   .progress-bar-fg { height:100%; background:var(--text); transition:width .4s ease; }
   .progress-text { text-align:right; font-size:.78rem; color:var(--muted); margin-top:8px; }
   .question-text { font-size:1.2rem; line-height:1.8; margin-bottom:32px; min-height:52px; }
   .likert { display:flex; justify-content:space-between; gap:6px; margin-bottom:28px; }
-  .likert-btn {
-    flex:1; padding:13px 4px; border-radius:3px; border:1px solid transparent;
-    background:rgba(44,36,22,.03); color:var(--muted); cursor:pointer;
-    font-size:.8rem; text-align:center; font-family:inherit; letter-spacing:.04em;
-    transition:all .25s ease;
-  }
-  .likert-btn:hover { background:rgba(44,36,22,.07); color:var(--text); border-color:var(--ink-border); }
+  .likert-btn { flex:1; padding:13px 4px; border-radius:3px; border:1px solid transparent; background:rgba(44,36,22,.03); color:var(--muted); cursor:pointer; font-size:.8rem; text-align:center; font-family:inherit; letter-spacing:.04em; transition:all .25s ease; position:relative; overflow:hidden; }
+  .likert-btn:hover { background:rgba(44,36,22,.07); color:var(--text); border-color:var(--ink); }
   .likert-btn.selected { background:var(--text); color:var(--card); font-weight:600; border-color:var(--text); }
   .nav-btns { display:flex; justify-content:space-between; gap:12px; margin-top:4px; }
 
   /* Results */
   .results-header { text-align:center; margin-bottom:32px; }
-  .results-header h2 {
-    font-family:'Ma Shan Zheng','STKaiti','KaiTi',cursive; font-size:1.8rem;
-    font-weight:400; margin-bottom:6px; position:relative;
-  }
-  .results-header h2::after {
-    content:''; display:block; width:40px; height:1.5px;
-    background:var(--accent); margin:14px auto 0; opacity:.4;
-  }
-  .chart-box {
-    background:var(--card); border:1px solid var(--ink-border); border-radius:4px;
-    padding:24px; max-width:420px; margin:0 auto 32px;
-  }
+  .results-header h2 { font-family:'Ma Shan Zheng','STKaiti','KaiTi',cursive; font-size:1.8rem; font-weight:400; margin-bottom:6px; position:relative; }
+  .results-header h2::after { content:''; display:block; width:40px; height:1.5px; background:var(--accent); margin:14px auto 0; opacity:.4; }
+  .chart-box { background:var(--card); border:1px solid var(--ink); border-radius:4px; padding:24px; max-width:420px; margin:0 auto 32px; }
   .chart-box canvas { max-height:320px; }
-  .trait-detail {
-    margin-bottom:20px; padding:20px 24px; background:var(--card);
-    border:1px solid var(--ink-border); border-left:3px solid;
-  }
+  .trait-detail { margin-bottom:20px; padding:20px 24px; background:var(--card); border:1px solid var(--ink); border-left:3px solid; }
   .trait-detail h3 { font-size:1.05rem; margin-bottom:4px; font-weight:600; }
   .trait-detail .score-label { font-size:.82rem; color:var(--muted); margin-bottom:8px; }
   .trait-detail .desc { font-size:.88rem; line-height:1.8; color:var(--muted); }
-  .score-bar-wrap { height:3px; background:var(--ink-border); margin:12px 0; overflow:hidden; }
+  .score-bar-wrap { height:3px; background:var(--ink); margin:12px 0; overflow:hidden; }
   .score-bar-fill { height:100%; transition:width .8s ease; }
   .footer-actions { text-align:center; display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
-
   .hidden { display:none !important; }
   .fade-in { animation:fadeIn .5s ease; }
-  @keyframes fadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
 
-  /* ---- 水墨纹理 ---- */
-  body::before {
-    content:''; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.5;
-    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
-  }
-  #screen-welcome::before, #screen-welcome::after {
-    content:''; position:absolute; left:24px; right:24px; height:1px;
-  }
+  /* 水墨纹理 */
+  body::before { content:''; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.5; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E"); }
+  #screen-welcome::before,#screen-welcome::after { content:''; position:absolute; left:24px; right:24px; height:1px; }
   #screen-welcome::before { top:-1px; background:linear-gradient(90deg,transparent,rgba(44,36,22,.1),transparent); }
   #screen-welcome::after { bottom:-1px; background:linear-gradient(90deg,transparent,rgba(44,36,22,.06),transparent); }
 
-  /* ---- AI 古诗区 ---- */
-  .ai-section {
-    margin-top:32px; padding:24px; background:var(--bg);
-    border:1px solid var(--ink-border); border-radius:4px;
-  }
+  /* AI 古诗区 — 黄金分割布局 */
+  .ai-section { margin-top:32px; padding:24px; background:var(--bg); border:1px solid var(--ink); border-radius:4px; }
   .ai-section h3 { font-size:1rem; margin-bottom:12px; display:flex; align-items:center; gap:8px; color:var(--muted); font-weight:400; }
-  .ai-result {
-    margin-top:16px; padding:24px; background:var(--card); border:1px solid var(--ink-border);
-    border-radius:2px; line-height:2.2; font-size:.92rem; white-space:pre-wrap; display:none; position:relative;
-  }
+  .ai-result { margin-top:16px; padding:28px 84px 28px 28px; background:var(--card); border:1px solid var(--ink); border-radius:2px; line-height:2.2; font-size:.92rem; white-space:pre-wrap; display:none; position:relative; min-height:120px; }
+  /* 诗区宽度 : 印章区留白 ≈ 1.618:1 */
   .ai-result.show { display:block; animation:fadeIn .6s ease; }
-  .ai-result .poem {
-    font-family:'Ma Shan Zheng','STKaiti','KaiTi',cursive;
-    font-size:1.25rem; line-height:2.4; color:var(--text); letter-spacing:.06em;
-  }
-  .spinner {
-    display:none; width:16px; height:16px; border:2px solid var(--ink-border);
-    border-top-color:var(--muted); border-radius:50%; animation:spin .6s linear infinite;
-  }
+  .ai-result .poem { font-family:'Ma Shan Zheng','STKaiti','KaiTi',cursive; font-size:1.25rem; line-height:2.4; color:var(--text); letter-spacing:.06em; max-width:100%; }
+  .spinner { display:none; width:16px; height:16px; border:2px solid var(--ink); border-top-color:var(--muted); border-radius:50%; animation:spin .6s linear infinite; }
   .spinner.show { display:inline-block; }
-  @keyframes spin { to { transform:rotate(360deg); } }
+  @keyframes spin { to{transform:rotate(360deg)} }
 
-  /* ---- 印章复制键 ---- */
+  /* 印章 — 真实篆刻造型 */
   .seal-copy {
-    display:none; width:50px; height:50px; border:2px solid var(--accent);
-    color:var(--accent); font-family:'Ma Shan Zheng','STKaiti','KaiTi',cursive;
-    font-size:1rem; text-align:center; line-height:46px; cursor:pointer;
-    background:transparent; transform:rotate(-6deg); transition:all .35s ease;
-    position:absolute; right:18px; bottom:14px; opacity:.45; user-select:none;
-    letter-spacing:.04em; z-index:2;
+    display:none; width:44px; height:62px;
+    border:2px solid var(--seal); color:var(--seal);
+    font-family:'Ma Shan Zheng','STKaiti','KaiTi',cursive;
+    font-size:1.15rem; text-align:center; cursor:pointer;
+    background:transparent; transform:rotate(-4deg);
+    transition:all .35s ease;
+    position:absolute; right:18px;
+    /* 黄金分割：距底 = 距右 / φ ≈ 18/1.618 ≈ 11, but let top align with poem's first line */
+    top:28px;
+    user-select:none; letter-spacing:.08em; z-index:2;
+    /* 双线边框模拟印边 */
+    box-shadow:inset 0 0 0 4px var(--card), inset 0 0 0 6px var(--seal);
+    line-height:1.25; padding-top:10px;
+    /* 印泥质感 */
+    text-shadow:0 1px 2px rgba(139,42,31,.2);
   }
   .seal-copy.show { display:block; }
-  .seal-copy:hover { opacity:.8; transform:rotate(-3deg) scale(1.06); border-color:var(--text); color:var(--text); }
-  /* 墨滴绽放 */
-  .seal-copy.inked { animation: inkBloom .7s ease-out; }
-  @keyframes inkBloom {
-    0% { box-shadow:0 0 0 0 rgba(44,36,22,.3); transform:rotate(-6deg) scale(1); }
-    40% { box-shadow:0 0 0 14px rgba(44,36,22,.08); transform:rotate(-4deg) scale(1.12); }
-    100% { box-shadow:0 0 0 24px rgba(44,36,22,0); transform:rotate(-6deg) scale(1); }
+  .seal-copy:hover {
+    opacity:1; transform:rotate(-2deg) scale(1.05);
+    box-shadow:inset 0 0 0 4px var(--card), inset 0 0 0 6px #6b2017;
+    color:#6b2017;
   }
 
-  @media (max-width:560px) {
-    .card { padding:32px 20px; }
-    h1 { font-size:1.8rem; }
-    .likert { flex-wrap:wrap; }
-    .likert-btn { min-width:48%; }
-    .chart-box { max-width:100%; }
+  /* 墨滴动画 — 全局点击 + 印章 */
+  .ink-ripple {
+    position:absolute; border-radius:50%;
+    background:rgba(44,36,22,.12);
+    transform:scale(0); animation:ripple .7s ease-out; pointer-events:none;
+  }
+  @keyframes ripple { to{transform:scale(4);opacity:0} }
+  .seal-copy.inked { animation:sealBloom .75s ease-out; }
+  @keyframes sealBloom {
+    0%{box-shadow:inset 0 0 0 4px var(--card),inset 0 0 0 6px var(--seal),0 0 0 0 rgba(139,42,31,.3);transform:rotate(-4deg) scale(1)}
+    35%{box-shadow:inset 0 0 0 4px var(--card),inset 0 0 0 6px var(--seal),0 0 0 16px rgba(139,42,31,.1);transform:rotate(-2deg) scale(1.1)}
+    100%{box-shadow:inset 0 0 0 4px var(--card),inset 0 0 0 6px var(--seal),0 0 0 28px rgba(139,42,31,0);transform:rotate(-4deg) scale(1)}
+  }
+
+  @media(max-width:560px){
+    .card{padding:32px 20px} h1{font-size:1.8rem}
+    .likert{flex-wrap:wrap} .likert-btn{min-width:48%} .chart-box{max-width:100%}
+    .ai-result{padding:20px 74px 20px 20px}
+    .seal-copy{width:38px;height:54px;font-size:1rem;right:14px;top:20px}
   }
 </style>
 </head>
@@ -213,313 +172,123 @@
   </div>
 
   <div class="card hidden" id="screen-results">
-    <div class="results-header">
-      <h2>测评结果</h2>
-      <p class="subtitle">大五人格剖面图</p>
-    </div>
+    <div class="results-header"><h2>测评结果</h2><p class="subtitle">大五人格剖面图</p></div>
     <div class="chart-box"><canvas id="radarChart"></canvas></div>
     <div id="trait-details"></div>
     <div class="ai-section">
       <h3>AI 诗意解读 <span class="spinner" id="ai-spinner"></span></h3>
       <div class="ai-result" id="ai-result"></div>
     </div>
-    <div class="footer-actions">
-      <button class="btn btn-primary btn-sm" onclick="restartTest()">重新测评</button>
-    </div>
+    <div class="footer-actions"><button class="btn btn-primary btn-sm" onclick="restartTest()">重新测评</button></div>
   </div>
 </div>
 
 <script>
-// ============================================================
-const questions = [
-  { d:"O", t:"我对艺术、音乐或文学有浓厚的兴趣。", r:false },
-  { d:"O", t:"我喜欢尝试新事物和体验不同的文化。", r:false },
-  { d:"O", t:"我有丰富的想象力和创造力。", r:false },
-  { d:"O", t:"我经常思考抽象的概念和哲学问题。", r:false },
-  { d:"O", t:"我乐于接受不同的观点和生活方式。", r:false },
-  { d:"O", t:"我对自然科学或新技术充满好奇。", r:false },
-  { d:"O", t:"我更喜欢按部就班，不喜欢变化。", r:true },
-  { d:"O", t:"我有广泛的兴趣爱好。", r:false },
-  { d:"O", t:"我经常沉浸在思考和内省中。", r:false },
-  { d:"O", t:"跟抽象理论相比，我更关注眼前的具体事实。", r:true },
-  { d:"C", t:"我做事有条理，喜欢提前规划。", r:false },
-  { d:"C", t:"我能够自律地完成任务，不拖延。", r:false },
-  { d:"C", t:"我注重细节，追求高质量的工作。", r:false },
-  { d:"C", t:"我遵守承诺，值得他人信赖。", r:false },
-  { d:"C", t:"我的房间或工作空间通常整洁有序。", r:false },
-  { d:"C", t:"我经常把事情拖到最后一刻才做。", r:true },
-  { d:"C", t:"我设定了明确的目标并努力去实现它们。", r:false },
-  { d:"C", t:"我做事冲动，想到什么就做什么。", r:true },
-  { d:"C", t:"我会认真检查自己的作业或工作成果。", r:false },
-  { d:"C", t:"我在团队中通常是推动事情进展的那个人。", r:false },
-  { d:"E", t:"我喜欢参加聚会和社交活动。", r:false },
-  { d:"E", t:"我在人群中感到精力充沛。", r:false },
-  { d:"E", t:"我很容易结交新朋友。", r:false },
-  { d:"E", t:"我说话声音较大，喜欢表达自己。", r:false },
-  { d:"E", t:"我宁愿一个人待着，也不愿参加热闹的活动。", r:true },
-  { d:"E", t:"我在社交场合中通常是活跃气氛的人。", r:false },
-  { d:"E", t:"我不喜欢成为众人关注的焦点。", r:true },
-  { d:"E", t:"我喜欢快节奏、充满刺激的生活。", r:false },
-  { d:"E", t:"跟很多人在一起时，我倾向于保持安静。", r:true },
-  { d:"E", t:"我喜欢与人交谈，分享自己的想法。", r:false },
-  { d:"A", t:"我乐于帮助身边有需要的人。", r:false },
-  { d:"A", t:"我相信大多数人都是善良诚实的。", r:false },
-  { d:"A", t:"我尽量避免与他人发生冲突。", r:false },
-  { d:"A", t:"我对他人的感受很敏感，容易共情。", r:false },
-  { d:"A", t:"我愿意为了团队利益牺牲个人利益。", r:false },
-  { d:"A", t:"我会直言不讳地表达批评意见。", r:true },
-  { d:"A", t:"我能够原谅曾经伤害过我的人。", r:false },
-  { d:"A", t:"我认为在竞争中压倒对手很重要。", r:true },
-  { d:"A", t:"我经常主动赞美和鼓励他人。", r:false },
-  { d:"A", t:"我对陌生人通常持谨慎怀疑的态度。", r:true },
-  { d:"N", t:"我经常感到焦虑或紧张。", r:false },
-  { d:"N", t:"我很容易因为小事而情绪波动。", r:false },
-  { d:"N", t:"我经常担心未来可能发生的事情。", r:false },
-  { d:"N", t:"在压力下我依然能够保持冷静。", r:true },
-  { d:"N", t:"我有时会突然感到悲伤或沮丧。", r:false },
-  { d:"N", t:"我对自己有充足的信心。", r:true },
-  { d:"N", t:"我容易被别人的批评所伤害。", r:false },
-  { d:"N", t:"大多数时候我感到满足和平静。", r:true },
-  { d:"N", t:"我经常反复思考自己的错误和不足。", r:false },
-  { d:"N", t:"遇到突发状况时，我能从容应对。", r:true },
+const Q=[
+  {d:"O",t:"我对艺术、音乐或文学有浓厚的兴趣。",r:0},{d:"O",t:"我喜欢尝试新事物和体验不同的文化。",r:0},{d:"O",t:"我有丰富的想象力和创造力。",r:0},{d:"O",t:"我经常思考抽象的概念和哲学问题。",r:0},{d:"O",t:"我乐于接受不同的观点和生活方式。",r:0},{d:"O",t:"我对自然科学或新技术充满好奇。",r:0},{d:"O",t:"我更喜欢按部就班，不喜欢变化。",r:1},{d:"O",t:"我有广泛的兴趣爱好。",r:0},{d:"O",t:"我经常沉浸在思考和内省中。",r:0},{d:"O",t:"跟抽象理论相比，我更关注眼前的具体事实。",r:1},
+  {d:"C",t:"我做事有条理，喜欢提前规划。",r:0},{d:"C",t:"我能够自律地完成任务，不拖延。",r:0},{d:"C",t:"我注重细节，追求高质量的工作。",r:0},{d:"C",t:"我遵守承诺，值得他人信赖。",r:0},{d:"C",t:"我的房间或工作空间通常整洁有序。",r:0},{d:"C",t:"我经常把事情拖到最后一刻才做。",r:1},{d:"C",t:"我设定了明确的目标并努力去实现它们。",r:0},{d:"C",t:"我做事冲动，想到什么就做什么。",r:1},{d:"C",t:"我会认真检查自己的作业或工作成果。",r:0},{d:"C",t:"我在团队中通常是推动事情进展的那个人。",r:0},
+  {d:"E",t:"我喜欢参加聚会和社交活动。",r:0},{d:"E",t:"我在人群中感到精力充沛。",r:0},{d:"E",t:"我很容易结交新朋友。",r:0},{d:"E",t:"我说话声音较大，喜欢表达自己。",r:0},{d:"E",t:"我宁愿一个人待着，也不愿参加热闹的活动。",r:1},{d:"E",t:"我在社交场合中通常是活跃气氛的人。",r:0},{d:"E",t:"我不喜欢成为众人关注的焦点。",r:1},{d:"E",t:"我喜欢快节奏、充满刺激的生活。",r:0},{d:"E",t:"跟很多人在一起时，我倾向于保持安静。",r:1},{d:"E",t:"我喜欢与人交谈，分享自己的想法。",r:0},
+  {d:"A",t:"我乐于帮助身边有需要的人。",r:0},{d:"A",t:"我相信大多数人都是善良诚实的。",r:0},{d:"A",t:"我尽量避免与他人发生冲突。",r:0},{d:"A",t:"我对他人的感受很敏感，容易共情。",r:0},{d:"A",t:"我愿意为了团队利益牺牲个人利益。",r:0},{d:"A",t:"我会直言不讳地表达批评意见。",r:1},{d:"A",t:"我能够原谅曾经伤害过我的人。",r:0},{d:"A",t:"我认为在竞争中压倒对手很重要。",r:1},{d:"A",t:"我经常主动赞美和鼓励他人。",r:0},{d:"A",t:"我对陌生人通常持谨慎怀疑的态度。",r:1},
+  {d:"N",t:"我经常感到焦虑或紧张。",r:0},{d:"N",t:"我很容易因为小事而情绪波动。",r:0},{d:"N",t:"我经常担心未来可能发生的事情。",r:0},{d:"N",t:"在压力下我依然能够保持冷静。",r:1},{d:"N",t:"我有时会突然感到悲伤或沮丧。",r:0},{d:"N",t:"我对自己有充足的信心。",r:1},{d:"N",t:"我容易被别人的批评所伤害。",r:0},{d:"N",t:"大多数时候我感到满足和平静。",r:1},{d:"N",t:"我经常反复思考自己的错误和不足。",r:0},{d:"N",t:"遇到突发状况时，我能从容应对。",r:1},
 ];
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}}
+shuffle(Q);
 
-function shuffle(a) { for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} }
-shuffle(questions);
-
-const DIM = {
-  O:{cn:"开放性",en:"Openness",e:"✦",c:"#5a4a3a"},
-  C:{cn:"尽责性",en:"Conscientiousness",e:"◆",c:"#3a5a5a"},
-  E:{cn:"外向性",en:"Extraversion",e:"◈",c:"#6b4e3d"},
-  A:{cn:"宜人性",en:"Agreeableness",e:"❖",c:"#4a6b5a"},
+const D={
+  O:{cn:"开放性",en:"Openness",e:"✦",c:"#5a4a3a"},C:{cn:"尽责性",en:"Conscientiousness",e:"◆",c:"#3a5a5a"},
+  E:{cn:"外向性",en:"Extraversion",e:"◈",c:"#6b4e3d"},A:{cn:"宜人性",en:"Agreeableness",e:"❖",c:"#4a6b5a"},
   N:{cn:"神经质",en:"Neuroticism",e:"◉",c:"#7a4a4a"},
 };
+const DESC={O:{vh:"您在开放性维度上得分极高，是真正的探索者与创新者。Costa & McCrae 的研究表明，极高开放性者往往在发散思维测验中表现卓越，且跨文化适应性极强。您的认知需求（Need for Cognition）远高于常人，对抽象概念和美学体验有着不可遏制的渴望。",h:"您在开放性维度上得分较高，对新异体验保持积极的态度。您乐于探索不同的文化、观念和艺术形式，在创造力相关任务中往往有良好表现。您的好奇心使您在面对变化时展现出较强的适应弹性。",mh:"您的开放性中等偏高，在务实与探索之间保持着健康的平衡。您对经过验证的方法有信心，但也不排斥适度的创新。这种特质使您既能在结构化环境中稳定发挥，也能在必要时跳出框架思考。",ml:"您的开放性中等偏低，更倾向于可预测和稳定的环境。您重视经验的积累和传统智慧，在面对全新事物时会审慎评估风险。这种谨慎使您在需要精准执行和持续专注的领域中表现出色。",l:"您的开放性较低，偏好熟悉、可靠的模式。研究显示，低开放性者在执行功能和行为一致性上往往具有优势。您脚踏实地、重视实证，在需要稳定输出和规则遵循的领域中表现突出。",vl:"您的开放性非常低，对秩序和确定性有着强烈的需求。这并非局限——高度结构化的思维使您在需要严谨和专注的任务中有着天然优势。您对传统的珍视和对细节的把控能力值得肯定。"},C:{vh:"您在尽责性维度上得分极高，体现出卓越的自我调节能力与成就导向。Barrick & Mount 的元分析指出，尽责性是预测工作绩效和学术成就最稳定的人格维度。您的规划能力、延迟满足和执行纪律远超常人。",h:"您在尽责性维度上得分较高，做事有条理、可靠且自律。您善于制定计划并坚持执行，在需要长期投入的项目中能够保持稳定的产出。您的可信赖性使您在团队中常常扮演关键角色。",mh:"您的尽责性中等偏高，在重要事务上能够认真对待，同时懂得适时灵活调整。您具备良好的自我管理能力，能够在秩序与弹性之间找到适合的平衡点。",ml:"您的尽责性中等偏低，更倾向于灵活即兴的行为风格。您不喜欢被严格的规则和计划束缚，但在关键时刻能够集中精力完成任务。这种弹性在快速变化的环境中具有适应性优势。",l:"您的尽责性较低，偏好自由灵活的生活方式。行为激活系统（BAS）较为敏感的您，在需要快速适应和即兴发挥的场合中往往表现出色。不过，对于需要长期承诺的任务，适当的规划工具可能对您有帮助。",vl:"您的尽责性非常低，是纯粹的即兴主义者。您活在当下，不受计划的约束，拥有极强的环境适应性。您的创造力在无序中蓬勃生长，但若能将这份灵动与适度的结构化工具结合，或许能走得更远。"},E:{vh:"您在外向性维度上得分极高，是天生的社交能量源。Eysenck 的皮质唤醒理论认为，外向者较低的基线唤醒水平驱使其主动寻求社交刺激。您在人群中焕发活力，善于激活团队氛围并建立广泛的社交网络。",h:"您在外向性维度上得分较高，喜欢与人交流并在社交中获取能量。您健谈、热情，能够迅速融入新环境，在需要表达与影响力的场合中如鱼得水。",mh:"您的外向性中等偏高，既能享受社交的乐趣，也需要适时的独处来恢复内在能量。您在熟悉的圈子里活跃自如，在陌生环境中则会适度保持观察距离。这种平衡让您兼具表达力与内在深度。",ml:"您的外向性中等偏低，偏向内省和深度交流。Jung 将内倾定义为能量向内流动——您不需要大量社交来补充能量，在小范围的深刻对话中反而感到最充实。",l:"您的外向性较低，更喜欢安静和独处。内向并非缺陷——研究表明，内向者在深度思考、精细分析和独立创造上具有显著优势。您的社交圈虽小但深厚，专注于质量而非数量。",vl:"您的外向性非常低，是深度的内省者。您拥有极为丰富的内心世界和卓越的独立思考能力。大群体的喧嚣会使您疲惫——这并非弱点，而是您的神经系统高度精细处理信息的表现。"},A:{vh:"您在宜人性维度上得分极高，是温暖与合作的典范。Graziano 等人的研究指出，高宜人性者对他人情绪的觉察更为敏锐，倾向于采用建设性的冲突解决策略。您的共情能力和利他倾向使您在团队中成为不可或缺的凝聚力核心。",h:"您在宜人性维度上得分较高，乐于助人、信任他人且善于合作。您在人际交往中温和友善，能够敏锐感知他人的情绪和需求，在需要协作与关怀的领域发挥独特价值。",mh:"您的宜人性中等偏高，通常以合作态度待人，但在必要时能够坚持原则。您善于在不同意见间寻找平衡，既能维护关系和谐，也不失独立的判断力。",ml:"您的宜人性中等偏低，更注重实事求是的理性判断。您不轻易被情感因素左右决策，在需要冷静分析和坚定立场的场合中具有优势。适当保留质疑态度是批判性思维的重要组成部分。",l:"您的宜人性较低，倾向于独立思考和直率表达。低宜人性并不等同于攻击性——在谈判、科学辩论和高风险决策中，适度的质疑和果断是宝贵的资产。您敢于表达异见，不易受群体压力左右。",vl:"您的宜人性非常低，是典型的理性独立者。您几乎不受群体压力影响，敢于挑战共识。您的客观冷静和竞争中的果断是稀有品质，但在人际关系维护上可能需要有意识地投入更多关注。"},N:{vh:"您在神经质维度上得分极高，情绪体验深邃而丰富。边缘系统的高度活跃使您对环境刺激和潜在威胁极为敏感——这在艺术创作、深度共情和风险预判上可能是巨大的天赋。建议通过正念和情绪调节训练来驾驭这份敏感的锋芒。",h:"您在神经质维度上得分较高，情绪反应较为强烈。您对负面刺激的探测阈值较低，这使您容易感到焦虑，但也赋予了您对细节的敏锐觉察力。适当的放松和自我关怀对您维持心理平衡非常重要。",mh:"您的情绪敏感性中等偏高，多数情况下能够维持稳定，但特定压力情境下会有明显的波动。您具备基本的情绪调节能力，可以在扰动后较快恢复平衡。",ml:"您的情绪稳定性中等偏高，面对日常压力时能够较好地保持从容。前额叶的执行控制与边缘系统的情绪反应之间达到了较好的平衡。",l:"您在神经质维度上得分较低，情绪稳定性出色。您表现出较强的心理韧性（Psychological Resilience），在压力下能够维持认知功能的正常运作。这种稳定性使您在高压决策和长期项目中保持出色的表现。",vl:"您的情绪稳定性极高，拥有非凡的心理韧性。您从容淡定，即使在极端压力下也能保持清晰的判断力。您是团队中情绪的锚点——但请留意，偶尔放下理性、感受情绪的流动，也同样重要。"}};
 
-const DESC={
-  O:{
-    vh:"您在开放性维度上得分极高，是真正的探索者与创新者。Costa & McCrae 的研究表明，极高开放性者往往在发散思维测验中表现卓越，且跨文化适应性极强。您的认知需求（Need for Cognition）远高于常人，对抽象概念和美学体验有着不可遏制的渴望。",
-    h:"您在开放性维度上得分较高，对新异体验保持积极的态度。您乐于探索不同的文化、观念和艺术形式，在创造力相关任务中往往有良好表现。您的好奇心使您在面对变化时展现出较强的适应弹性。",
-    mh:"您的开放性中等偏高，在务实与探索之间保持着健康的平衡。您对经过验证的方法有信心，但也不排斥适度的创新。这种特质使您既能在结构化环境中稳定发挥，也能在必要时跳出框架思考。",
-    ml:"您的开放性中等偏低，更倾向于可预测和稳定的环境。您重视经验的积累和传统智慧，在面对全新事物时会审慎评估风险。这种谨慎使您在需要精准执行和持续专注的领域中表现出色。",
-    l:"您的开放性较低，偏好熟悉、可靠的模式。研究显示，低开放性者在执行功能和行为一致性上往往具有优势。您脚踏实地、重视实证，在需要稳定输出和规则遵循的领域中表现突出。",
-    vl:"您的开放性非常低，对秩序和确定性有着强烈的需求。这并非局限——高度结构化的思维使您在需要严谨和专注的任务中有着天然优势。您对传统的珍视和对细节的把控能力值得肯定。"
-  },
-  C:{
-    vh:"您在尽责性维度上得分极高，体现出卓越的自我调节能力与成就导向。Barrick & Mount 的元分析指出，尽责性是预测工作绩效和学术成就最稳定的人格维度。您的规划能力、延迟满足和执行纪律远超常人。",
-    h:"您在尽责性维度上得分较高，做事有条理、可靠且自律。您善于制定计划并坚持执行，在需要长期投入的项目中能够保持稳定的产出。您的可信赖性使您在团队中常常扮演关键角色。",
-    mh:"您的尽责性中等偏高，在重要事务上能够认真对待，同时懂得适时灵活调整。您具备良好的自我管理能力，能够在秩序与弹性之间找到适合的平衡点。",
-    ml:"您的尽责性中等偏低，更倾向于灵活即兴的行为风格。您不喜欢被严格的规则和计划束缚，但在关键时刻能够集中精力完成任务。这种弹性在快速变化的环境中具有适应性优势。",
-    l:"您的尽责性较低，偏好自由灵活的生活方式。行为激活系统（BAS）较为敏感的您，在需要快速适应和即兴发挥的场合中往往表现出色。不过，对于需要长期承诺的任务，适当的规划工具可能对您有帮助。",
-    vl:"您的尽责性非常低，是纯粹的即兴主义者。您活在当下，不受计划的约束，拥有极强的环境适应性。您的创造力在无序中蓬勃生长，但若能将这份灵动与适度的结构化工具结合，或许能走得更远。"
-  },
-  E:{
-    vh:"您在外向性维度上得分极高，是天生的社交能量源。Eysenck 的皮质唤醒理论认为，外向者较低的基线唤醒水平驱使其主动寻求社交刺激。您在人群中焕发活力，善于激活团队氛围并建立广泛的社交网络。",
-    h:"您在外向性维度上得分较高，喜欢与人交流并在社交中获取能量。您健谈、热情，能够迅速融入新环境，在需要表达与影响力的场合中如鱼得水。",
-    mh:"您的外向性中等偏高，既能享受社交的乐趣，也需要适时的独处来恢复内在能量。您在熟悉的圈子里活跃自如，在陌生环境中则会适度保持观察距离。这种平衡让您兼具表达力与内在深度。",
-    ml:"您的外向性中等偏低，偏向内省和深度交流。Jung 将内倾定义为能量向内流动——您不需要大量社交来补充能量，在小范围的深刻对话中反而感到最充实。",
-    l:"您的外向性较低，更喜欢安静和独处。内向并非缺陷——研究表明，内向者在深度思考、精细分析和独立创造上具有显著优势。您的社交圈虽小但深厚，专注于质量而非数量。",
-    vl:"您的外向性非常低，是深度的内省者。您拥有极为丰富的内心世界和卓越的独立思考能力。大群体的喧嚣会使您疲惫——这并非弱点，而是您的神经系统高度精细处理信息的表现。"
-  },
-  A:{
-    vh:"您在宜人性维度上得分极高，是温暖与合作的典范。Graziano 等人的研究指出，高宜人性者对他人情绪的觉察更为敏锐，倾向于采用建设性的冲突解决策略。您的共情能力和利他倾向使您在团队中成为不可或缺的凝聚力核心。",
-    h:"您在宜人性维度上得分较高，乐于助人、信任他人且善于合作。您在人际交往中温和友善，能够敏锐感知他人的情绪和需求，在需要协作与关怀的领域发挥独特价值。",
-    mh:"您的宜人性中等偏高，通常以合作态度待人，但在必要时能够坚持原则。您善于在不同意见间寻找平衡，既能维护关系和谐，也不失独立的判断力。",
-    ml:"您的宜人性中等偏低，更注重实事求是的理性判断。您不轻易被情感因素左右决策，在需要冷静分析和坚定立场的场合中具有优势。适当保留质疑态度是批判性思维的重要组成部分。",
-    l:"您的宜人性较低，倾向于独立思考和直率表达。低宜人性并不等同于攻击性——在谈判、科学辩论和高风险决策中，适度的质疑和果断是宝贵的资产。您敢于表达异见，不易受群体压力左右。",
-    vl:"您的宜人性非常低，是典型的理性独立者。您几乎不受群体压力影响，敢于挑战共识。您的客观冷静和竞争中的果断是稀有品质，但在人际关系维护上可能需要有意识地投入更多关注。"
-  },
-  N:{
-    vh:"您在神经质维度上得分极高，情绪体验深邃而丰富。边缘系统的高度活跃使您对环境刺激和潜在威胁极为敏感——这在艺术创作、深度共情和风险预判上可能是巨大的天赋。建议通过正念和情绪调节训练来驾驭这份敏感的锋芒。",
-    h:"您在神经质维度上得分较高，情绪反应较为强烈。您对负面刺激的探测阈值较低，这使您容易感到焦虑，但也赋予了您对细节的敏锐觉察力。适当的放松和自我关怀对您维持心理平衡非常重要。",
-    mh:"您的情绪敏感性中等偏高，多数情况下能够维持稳定，但特定压力情境下会有明显的波动。您具备基本的情绪调节能力，可以在扰动后较快恢复平衡。",
-    ml:"您的情绪稳定性中等偏高，面对日常压力时能够较好地保持从容。前额叶的执行控制与边缘系统的情绪反应之间达到了较好的平衡。",
-    l:"您在神经质维度上得分较低，情绪稳定性出色。您表现出较强的心理韧性（Psychological Resilience），在压力下能够维持认知功能的正常运作。这种稳定性使您在高压决策和长期项目中保持出色的表现。",
-    vl:"您的情绪稳定性极高，拥有非凡的心理韧性。您从容淡定，即使在极端压力下也能保持清晰的判断力。您是团队中情绪的锚点——但请留意，偶尔放下理性、感受情绪的流动，也同样重要。"
-  }
-};
+let cur=0,poemText='';
+const ans=new Array(Q.length).fill(null);
 
-// ---- State ----
-let cur = 0, poemText = '';
-const answers = new Array(questions.length).fill(null);
-
-function startTest() {
-  cur=0; answers.fill(null);
-  document.getElementById('screen-welcome').classList.add('hidden');
-  document.getElementById('screen-results').classList.add('hidden');
-  document.getElementById('screen-test').classList.remove('hidden');
-  renderQuestion();
+// 全局墨滴涟漪
+function ripple(e,el){
+  const r=document.createElement('span');
+  const s=Math.max(el.offsetWidth,el.offsetHeight);
+  r.className='ink-ripple';
+  r.style.width=r.style.height=s+'px';
+  r.style.left=(e.clientX-el.getBoundingClientRect().left-s/2)+'px';
+  r.style.top=(e.clientY-el.getBoundingClientRect().top-s/2)+'px';
+  el.appendChild(r);
+  setTimeout(()=>r.remove(),700);
 }
+document.addEventListener('click',e=>{
+  const el=e.target.closest('.btn,.likert-btn,.trait-chip');
+  if(el) ripple(e,el);
+});
 
-function renderQuestion() {
-  const q=questions[cur], qt=document.getElementById('question-text');
-  qt.textContent=(cur+1)+'. '+q.t;
-  qt.classList.remove('fade-in'); void qt.offsetWidth; qt.classList.add('fade-in');
+function startTest(){cur=0;ans.fill(null);S('screen-welcome','screen-results').map(id=>document.getElementById(id).classList.add('hidden'));document.getElementById('screen-test').classList.remove('hidden');renderQ();}
+function S(...ids){return ids}
 
-  const group=document.getElementById('likert-group');
-  group.innerHTML='';
-  ['非常不同意','不同意','中立','同意','非常同意'].forEach((lbl,i)=>{
-    const btn=document.createElement('button');
-    btn.className='likert-btn'; btn.textContent=lbl;
-    if(answers[cur]===i+1) btn.classList.add('selected');
-    btn.onclick=()=>{ answers[cur]=i+1; renderQuestion(); };
-    group.appendChild(btn);
+function renderQ(){
+  const q=Q[cur],qt=document.getElementById('question-text');
+  qt.textContent=(cur+1)+'. '+q.t;qt.classList.remove('fade-in');void qt.offsetWidth;qt.classList.add('fade-in');
+  const g=document.getElementById('likert-group');g.innerHTML='';
+  ['非常不同意','不同意','中立','同意','非常同意'].forEach((l,i)=>{
+    const b=document.createElement('button');b.className='likert-btn';b.textContent=l;
+    if(ans[cur]===i+1)b.classList.add('selected');
+    b.onclick=()=>{ans[cur]=i+1;renderQ();};g.appendChild(b);
   });
-
-  const pct=((cur+1)/questions.length*100).toFixed(0);
-  document.getElementById('progress-bar').style.width=pct+'%';
-  document.getElementById('progress-text').textContent=(cur+1)+' / '+questions.length;
-
+  document.getElementById('progress-bar').style.width=((cur+1)/Q.length*100).toFixed(0)+'%';
+  document.getElementById('progress-text').textContent=(cur+1)+' / '+Q.length;
   document.getElementById('btn-prev').style.visibility=cur===0?'hidden':'visible';
   const nb=document.getElementById('btn-next');
-  if(answers[cur]!==null){ nb.disabled=false; nb.textContent=cur===questions.length-1?'查看结果':'下一题'; }
-  else { nb.disabled=true; nb.textContent='请先选择答案'; }
+  if(ans[cur]!==null){nb.disabled=false;nb.textContent=cur===Q.length-1?'查看结果':'下一题';}
+  else{nb.disabled=true;nb.textContent='请先选择答案';}
   document.getElementById('nav-spacer').style.display=cur===0?'none':'inline';
 }
-
-function nextQuestion() {
-  if(answers[cur]===null) return;
-  if(cur<questions.length-1){ cur++; renderQuestion(); document.getElementById('screen-test').scrollIntoView({behavior:'smooth'}); }
-  else showResults();
+function nextQuestion(){if(ans[cur]===null)return;if(cur<Q.length-1){cur++;renderQ();document.getElementById('screen-test').scrollIntoView({behavior:'smooth'});}else showResults();}
+function prevQuestion(){if(cur>0){cur--;renderQ();}}
+function scores(){
+  const s={O:[],C:[],E:[],A:[],N:[]};Q.forEach((q,i)=>{let v=ans[i];if(q.r)v=6-v;s[q.d].push(v);});
+  const r={};for(const[k,v]of Object.entries(s))r[k]=(v.reduce((a,b)=>a+b,0)/v.length).toFixed(1);return r;
 }
-function prevQuestion() { if(cur>0){ cur--; renderQuestion(); } }
+function tier(s){const n=parseFloat(s);if(n>=4.5)return{k:'vh',l:'极高',g:'A+'};if(n>=4.0)return{k:'h',l:'较高',g:'A'};if(n>=3.2)return{k:'mh',l:'中高',g:'B'};if(n>=2.6)return{k:'ml',l:'中低',g:'C'};if(n>=2.0)return{k:'l',l:'较低',g:'D'};return{k:'vl',l:'极低',g:'E'};}
 
-function calcScores() {
-  const s={O:[],C:[],E:[],A:[],N:[]};
-  questions.forEach((q,i)=>{ let v=answers[i]; if(q.r) v=6-v; s[q.d].push(v); });
-  const r={};
-  for(const[k,v]of Object.entries(s)) r[k]=(v.reduce((a,b)=>a+b,0)/v.length).toFixed(1);
-  return r;
-}
-function tier(s) {
-  const n=parseFloat(s);
-  if(n>=4.5) return{k:'vh',l:'极高',g:'A+'};
-  if(n>=4.0) return{k:'h',l:'较高',g:'A'};
-  if(n>=3.2) return{k:'mh',l:'中高',g:'B'};
-  if(n>=2.6) return{k:'ml',l:'中低',g:'C'};
-  if(n>=2.0) return{k:'l',l:'较低',g:'D'};
-  return{k:'vl',l:'极低',g:'E'};
-}
-
-function showResults() {
+function showResults(){
   document.getElementById('screen-test').classList.add('hidden');
   document.getElementById('screen-results').classList.remove('hidden');
-  const scores=calcScores(), dims=['O','C','E','A','N'];
-
-  const rCtx=document.getElementById('radarChart').getContext('2d');
-  if(window._rd) window._rd.destroy();
-  window._rd=new Chart(rCtx,{
-    type:'radar',
-    data:{
-      labels:dims.map(d=>DIM[d].e+' '+DIM[d].cn),
-      datasets:[{
-        data:dims.map(d=>scores[d]),
-        backgroundColor:'rgba(44,36,22,.06)', borderColor:'rgba(44,36,22,.65)', borderWidth:1.5,
-        pointBackgroundColor:dims.map(d=>DIM[d].c), pointBorderColor:'#fefcf7',
-        pointBorderWidth:1.5, pointRadius:4,
-      }]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:true,
-      scales:{r:{
-        min:1,max:5,
-        ticks:{stepSize:1,color:'#8b8172',backdropColor:'transparent',font:{size:10}},
-        grid:{color:'rgba(44,36,22,.1)'},
-        pointLabels:{color:'#2c2416',font:{size:12,family:"'Noto Serif SC',serif"}},
-        angleLines:{color:'rgba(44,36,22,.08)'}
-      }},
-      plugins:{legend:{display:false}}
-    }
+  const sc=scores(),ds=['O','C','E','A','N'];
+  const rc=document.getElementById('radarChart').getContext('2d');
+  if(window._rd)window._rd.destroy();
+  window._rd=new Chart(rc,{
+    type:'radar',data:{labels:ds.map(d=>D[d].e+' '+D[d].cn),datasets:[{data:ds.map(d=>sc[d]),backgroundColor:'rgba(44,36,22,.06)',borderColor:'rgba(44,36,22,.65)',borderWidth:1.5,pointBackgroundColor:ds.map(d=>D[d].c),pointBorderColor:'#fefcf7',pointBorderWidth:1.5,pointRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:true,scales:{r:{min:1,max:5,ticks:{stepSize:1,color:'#8b8172',backdropColor:'transparent',font:{size:10}},grid:{color:'rgba(44,36,22,.1)'},pointLabels:{color:'#2c2416',font:{size:12,family:"'Noto Serif SC',serif"}},angleLines:{color:'rgba(44,36,22,.08)'}}},plugins:{legend:{display:false}}}
   });
-
-  const det=document.getElementById('trait-details');
-  det.innerHTML='';
-  dims.forEach(d=>{
-    const info=DIM[d], sc=scores[d], t=tier(sc);
-    det.innerHTML+=`
-      <div class="trait-detail" style="border-left-color:${info.c}">
-        <h3>${info.e} ${info.cn} <span style="font-weight:400;font-size:.85rem;color:var(--muted)">${info.en}</span></h3>
-        <div class="score-label">得分: <strong style="color:${info.c}">${sc}</strong> / 5.0 — ${t.l} <span style="font-size:.75rem;color:var(--muted)">${t.g}</span></div>
-        <div class="score-bar-wrap"><div class="score-bar-fill" style="width:${((sc-1)/4*100).toFixed(0)}%;background:${info.c}"></div></div>
-        <div class="desc">${DESC[d][t.k]}</div>
-      </div>`;
-  });
-  document.getElementById('screen-results').scrollIntoView({behavior:'smooth'});
-  generateAI();
+  const det=document.getElementById('trait-details');det.innerHTML='';
+  ds.forEach(d=>{const i=D[d],s=sc[d],t=tier(s);det.innerHTML+=`<div class="trait-detail" style="border-left-color:${i.c}"><h3>${i.e} ${i.cn} <span style="font-weight:400;font-size:.85rem;color:var(--muted)">${i.en}</span></h3><div class="score-label">得分: <strong style="color:${i.c}">${s}</strong> / 5.0 — ${t.l} <span style="font-size:.75rem;color:var(--muted)">${t.g}</span></div><div class="score-bar-wrap"><div class="score-bar-fill" style="width:${((s-1)/4*100).toFixed(0)}%;background:${i.c}"></div></div><div class="desc">${DESC[d][t.k]}</div></div>`;});
+  document.getElementById('screen-results').scrollIntoView({behavior:'smooth'});genAI();
 }
+function restartTest(){ans.fill(null);cur=0;document.getElementById('screen-results').classList.add('hidden');document.getElementById('screen-test').classList.add('hidden');document.getElementById('screen-welcome').classList.remove('hidden');document.getElementById('screen-welcome').scrollIntoView({behavior:'smooth'});}
 
-function restartTest() {
-  answers.fill(null); cur=0;
-  document.getElementById('screen-results').classList.add('hidden');
-  document.getElementById('screen-test').classList.add('hidden');
-  document.getElementById('screen-welcome').classList.remove('hidden');
-  document.getElementById('screen-welcome').scrollIntoView({behavior:'smooth'});
-}
-
-// ---- 印章复制 ----
-function copyAll() {
-  const scores=calcScores(), dims=['O','C','E','A','N'];
-  let t='大五人格测评\n\n';
-  dims.forEach(d=>{ t+=`${DIM[d].e} ${DIM[d].cn}：${scores[d]}/5.0\n`; });
-  if(poemText){ t+='\n———\n'+poemText+'\n'; }
+function copyAll(){
+  const sc=scores(),ds=['O','C','E','A','N'];
+  let t='大五人格测评\n\n';ds.forEach(d=>{t+=`${D[d].e} ${D[d].cn}：${sc[d]}/5.0\n`;});
+  if(poemText){t+='\n———\n'+poemText+'\n';}
   t+='\nhttps://shao-jingyao.github.io/big-five-test/';
   navigator.clipboard.writeText(t).then(()=>{
-    const btn=document.getElementById('seal-btn');
-    if(!btn) return;
-    btn.classList.add('inked');
-    setTimeout(()=>btn.classList.remove('inked'),750);
+    const btn=document.getElementById('seal-btn');if(!btn)return;
+    btn.classList.add('inked');setTimeout(()=>btn.classList.remove('inked'),800);
   }).catch(()=>{});
 }
 
-// ---- AI 古诗生成 ----
-function generateAI() {
-  const sp=document.getElementById('ai-spinner'), dv=document.getElementById('ai-result');
-  if(generateAI._cd && Date.now()-generateAI._cd<3000) return;
-  generateAI._cd=Date.now();
-  sp.classList.add('show'); dv.classList.remove('show'); dv.innerHTML='';
-
-  const today=new Date().toDateString();
-  const u=JSON.parse(localStorage.getItem('_au')||'{"d":"","n":0}');
-  if(u.d!==today){ u.d=today; u.n=0; }
-  if(u.n>=15){ dv.innerHTML='<span style="color:var(--accent)">今日额度已用完，请明天再来。</span>'; dv.classList.add('show'); sp.classList.remove('show'); return; }
-
-  const scores=calcScores();
-  const profile=['O','C','E','A','N'].map(d=>{
-    const t=tier(scores[d]); return `${DIM[d].e}${DIM[d].cn}(${DIM[d].en}): ${scores[d]}/5.0 — ${t.l}`;
-  }).join('\n');
-
-  const prompt=`根据大五人格分数创作七言律诗（8句），要求：
-- 前6句：每句对应一个维度特质，用自然意象隐喻（如山、海、云、松、风、月、舟等），忌直白说教
-- 后2句：转为恳切的个人建言，如长者叮咛，有力度亦有温度
-- 严格押平声韵（一韵到底），对仗工整，格调典雅
-- 只输出诗，一行一句，不加标点符号外的任何文字
-
-分数如下：
-${profile}`;
-
-  var _x1='c2stY2Vi',_x2='MTkzNzdlNTBk',_x3='NDc2ZWE5MWVk',_x4='OWY0YmNhYTFiMjk=';
-  var _key=(function(a,b,c,d){return atob(a)+atob(b)+atob(c)+atob(d)})(_x1,_x2,_x3,_x4);
-
-  fetch('https://api.deepseek.com/v1/chat/completions',{
-    method:'POST',
-    headers:{'Content-Type':'application/json','Authorization':'Bearer '+_key},
-    body:JSON.stringify({
-      model:'deepseek-chat',
-      messages:[
-        {role:'system',content:'你是一位古典诗词大师，精通唐诗格律与意象。你的七言律诗讲究平仄对仗、意象交融、含蓄蕴藉、尾联升华。'},
-        {role:'user',content:prompt}
-      ],
-      temperature:0.9, max_tokens:200
-    })
-  }).then(r=>{if(!r.ok) throw new Error('API'); return r.json();})
-  .then(data=>{
-    u.n++; localStorage.setItem('_au',JSON.stringify(u));
-    poemText=data.choices[0].message.content.trim();
-    dv.innerHTML=`<div class="poem">${poemText.replace(/\n/g,'<br>')}</div><button class="seal-copy show" id="seal-btn" onclick="copyAll()" title="钤印存念">存</button>`;
-    dv.classList.add('show'); sp.classList.remove('show');
-  }).catch(()=>{
-    dv.innerHTML='<span style="color:var(--accent)">生成失败，请稍后重试</span>';
-    dv.classList.add('show'); sp.classList.remove('show');
-  });
+function genAI(){
+  const sp=document.getElementById('ai-spinner'),dv=document.getElementById('ai-result');
+  if(genAI._cd&&Date.now()-genAI._cd<3000)return;genAI._cd=Date.now();
+  sp.classList.add('show');dv.classList.remove('show');dv.innerHTML='';
+  const today=new Date().toDateString(),u=JSON.parse(localStorage.getItem('_au')||'{"d":"","n":0}');
+  if(u.d!==today){u.d=today;u.n=0;}
+  if(u.n>=15){dv.innerHTML='<span style="color:var(--accent)">今日额度已用完，请明天再来。</span>';dv.classList.add('show');sp.classList.remove('show');return;}
+  const sc=scores(),profile=['O','C','E','A','N'].map(d=>{const t=tier(sc[d]);return`${D[d].e}${D[d].cn}(${D[d].en}): ${sc[d]}/5.0 — ${t.l}`;}).join('\n');
+  const prompt=`根据大五人格分数创作七言律诗（8句），要求：\n- 前6句：每句对应一个维度特质，用自然意象隐喻（如山、海、云、松、风、月、舟等），忌直白说教\n- 后2句：转为恳切的个人建言，如长者叮咛，有力度亦有温度\n- 严格押平声韵（一韵到底），对仗工整，格调典雅\n- 只输出诗，一行一句，不加标点符号外的任何文字\n\n分数如下：\n${profile}`;
+  var _x1='c2stY2Vi',_x2='MTkzNzdlNTBk',_x3='NDc2ZWE5MWVk',_x4='OWY0YmNhYTFiMjk=',_key=(function(a,b,c,d){return atob(a)+atob(b)+atob(c)+atob(d)})(_x1,_x2,_x3,_x4);
+  fetch('https://api.deepseek.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+_key},body:JSON.stringify({model:'deepseek-chat',messages:[{role:'system',content:'你是一位古典诗词大师，精通唐诗格律与意象。你的七言律诗讲究平仄对仗、意象交融、含蓄蕴藉、尾联升华。'},{role:'user',content:prompt}],temperature:0.9,max_tokens:200})})
+  .then(r=>{if(!r.ok)throw new Error('API');return r.json()})
+  .then(data=>{u.n++;localStorage.setItem('_au',JSON.stringify(u));poemText=data.choices[0].message.content.trim();dv.innerHTML=`<div class="poem">${poemText.replace(/\n/g,'<br>')}</div><button class="seal-copy show" id="seal-btn" onclick="copyAll()" title="钤印存念">存<br>念</button>`;dv.classList.add('show');sp.classList.remove('show');})
+  .catch(()=>{dv.innerHTML='<span style="color:var(--accent)">生成失败，请稍后重试</span>';dv.classList.add('show');sp.classList.remove('show');});
 }
 </script>
 </body>
