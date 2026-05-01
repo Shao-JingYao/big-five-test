@@ -254,6 +254,63 @@
   .hidden { display: none !important; }
   .fade-in { animation: fadeIn .4s ease; }
   @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+  /* AI section */
+  .ai-section {
+    margin-top: 32px;
+    padding: 24px;
+    background: rgba(108,99,255,.06);
+    border-radius: var(--radius);
+    border: 1px solid rgba(108,99,255,.15);
+  }
+  .ai-section h3 { font-size:1.1rem; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+  .api-key-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .api-key-row input {
+    flex: 1;
+    min-width: 200px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.04);
+    color: var(--text);
+    font-size: .85rem;
+    font-family: monospace;
+  }
+  .api-key-row input::placeholder { color: var(--muted); }
+  .ai-result {
+    margin-top: 16px;
+    padding: 20px;
+    background: rgba(0,0,0,.2);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,.06);
+    line-height: 2;
+    font-size: .92rem;
+    white-space: pre-wrap;
+    display: none;
+  }
+  .ai-result.show { display: block; animation: fadeIn .6s ease; }
+  .ai-result .poem {
+    font-style: italic;
+    color: #ffe66d;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255,255,255,.1);
+  }
+  .ai-result .advice { color: #4ecdc4; }
+  .spinner {
+    display: none;
+    width: 20px; height: 20px;
+    border: 2px solid rgba(255,255,255,.2);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin .6s linear infinite;
+  }
+  .spinner.show { display: inline-block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
@@ -303,6 +360,16 @@
       <div class="chart-box"><canvas id="barChart"></canvas></div>
     </div>
     <div id="trait-details"></div>
+    <!-- AI 深度分析 -->
+    <div class="ai-section" id="ai-section">
+      <h3>🤖 AI 深度解读 <span class="spinner" id="ai-spinner"></span></h3>
+      <div class="api-key-row">
+        <input type="password" id="api-key-input" placeholder="输入 DeepSeek / OpenAI API Key" autocomplete="off">
+        <button class="btn btn-secondary btn-sm" onclick="toggleApiKey()">👁</button>
+        <button class="btn btn-primary btn-sm" onclick="generateAI()">✨ 生成诗意评价</button>
+      </div>
+      <div class="ai-result" id="ai-result"></div>
+    </div>
     <div class="footer-actions">
       <button class="btn btn-primary btn-sm" onclick="restartTest()">🔄 重新测评</button>
       <button class="btn btn-secondary btn-sm" onclick="shareResult()">📋 复制结果</button>
@@ -644,6 +711,96 @@ function shareResult() {
     prompt('请手动复制结果：', text);
   });
 }
+
+// ---- AI generation ----
+function toggleApiKey() {
+  const inp = document.getElementById('api-key-input');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
+async function generateAI() {
+  const key = document.getElementById('api-key-input').value.trim();
+  if (!key) { alert('请先输入 API Key'); return; }
+  localStorage.setItem('bf_api_key', key);
+
+  const spinner = document.getElementById('ai-spinner');
+  const resultDiv = document.getElementById('ai-result');
+  spinner.classList.add('show');
+  resultDiv.classList.remove('show');
+  resultDiv.innerHTML = '';
+
+  const scores = calcScores();
+  const dims = ['O','C','E','A','N'];
+  const profile = dims.map(d => {
+    const tier = scoreToTier(scores[d]);
+    return `${DIM_NAMES[d].emoji}${DIM_NAMES[d].cn}(${DIM_NAMES[d].en}): ${scores[d]}/5.0 — ${tier.label}`;
+  }).join('\n');
+
+  const prompt = `你是一位心理学诗人。根据以下大五人格测评结果，为用户创作一首四言或五言古诗（4-8句），诗要贴合用户的性格特质。然后在诗后给出2-3条个性化发展建议。
+
+${profile}
+
+请按以下格式回复：
+【诗意画像】
+（古诗内容）
+
+【发展建议】
+1. （建议1）
+2. （建议2）
+3. （建议3）`;
+
+  try {
+    const res = await fetch('https://api.deepseek.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + key
+      },
+      body: JSON.stringify({
+        model: 'deepseek-chat',
+        messages: [
+          { role: 'system', content: '你是一位精通古典诗词的心理学专家。你的诗要优雅、贴切、有深度。每次回复严格遵循指定格式。' },
+          { role: 'user', content: prompt }
+        ],
+        temperature: 0.9,
+        max_tokens: 800
+      })
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error?.message || `API 请求失败 (${res.status})`);
+    }
+
+    const data = await res.json();
+    const raw = data.choices[0].message.content;
+
+    // Parse poem and advice
+    let poem = '', advice = '';
+    const poemMatch = raw.match(/【诗意画像】\s*([\s\S]*?)(?=【发展建议】|$)/);
+    const adviceMatch = raw.match(/【发展建议】\s*([\s\S]*)/);
+
+    if (poemMatch) poem = poemMatch[1].trim();
+    if (adviceMatch) advice = adviceMatch[1].trim();
+
+    resultDiv.innerHTML = `
+      <div class="poem">${poem.replace(/\n/g, '<br>')}</div>
+      <div class="advice">${advice.replace(/\n/g, '<br>')}</div>
+    `;
+    resultDiv.classList.add('show');
+  } catch (e) {
+    resultDiv.innerHTML = `<span style="color:#ff6b6b">❌ ${e.message}</span><br><span style="color:var(--muted);font-size:.8rem">请检查 API Key 是否正确，或稍后重试。</span>`;
+    resultDiv.classList.add('show');
+  } finally {
+    spinner.classList.remove('show');
+  }
+}
+
+// Load saved API key on page load
+(function() {
+  const saved = localStorage.getItem('bf_api_key');
+  if (saved) document.getElementById('api-key-input').value = saved;
+})();
 </script>
 </body>
 </html>
