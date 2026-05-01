@@ -263,6 +263,25 @@
     border: 1px solid rgba(108,99,255,.15);
   }
   .ai-section h3 { font-size:1.1rem; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+  .api-key-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .api-key-row input {
+    flex: 1;
+    min-width: 180px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.04);
+    color: var(--text);
+    font-size: .82rem;
+    font-family: monospace;
+  }
+  .api-key-row input::placeholder { color: var(--muted); font-family: inherit; font-size:.78rem; }
   .ai-result {
     margin-top: 16px;
     padding: 20px;
@@ -345,7 +364,9 @@
     <!-- AI 深度分析 -->
     <div class="ai-section" id="ai-section">
       <h3>🤖 AI 深度解读 <span class="spinner" id="ai-spinner"></span></h3>
-      <div class="btn-center">
+      <div class="api-key-row">
+        <input type="password" id="api-key-input" placeholder="DeepSeek API Key（可选，留空则用内置算法）" autocomplete="off">
+        <button class="btn btn-secondary btn-sm" onclick="toggleApiKey()">👁</button>
         <button class="btn btn-primary btn-sm" onclick="generateAI()">✨ 生成诗意评价</button>
       </div>
       <div class="ai-result" id="ai-result"></div>
@@ -692,27 +713,95 @@ function shareResult() {
   });
 }
 
-// ---- AI generation (algorithmic, no API needed) ----
-function generateAI() {
+// ---- AI generation (API first, algorithmic fallback) ----
+function toggleApiKey() {
+  const inp = document.getElementById('api-key-input');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
+async function generateAI() {
+  const key = document.getElementById('api-key-input').value.trim();
   const spinner = document.getElementById('ai-spinner');
   const resultDiv = document.getElementById('ai-result');
   spinner.classList.add('show');
   resultDiv.classList.remove('show');
+  resultDiv.innerHTML = '';
 
-  // Simulate brief "thinking" for UX
+  // Try DeepSeek API if key provided
+  if (key) {
+    localStorage.setItem('bf_api_key', key);
+    const scores = calcScores();
+    const dims = ['O','C','E','A','N'];
+    const profile = dims.map(d => {
+      const tier = scoreToTier(scores[d]);
+      return `${DIM_NAMES[d].emoji}${DIM_NAMES[d].cn}(${DIM_NAMES[d].en}): ${scores[d]}/5.0 — ${tier.label}`;
+    }).join('\n');
+
+    const prompt = `你是一位心理学诗人。根据以下大五人格测评结果，为用户创作一首七言古诗（6-8句），诗要贴合用户的性格特质，有诗意和深度。然后在诗后给出2-3条个性化发展建议。
+
+${profile}
+
+请严格按以下格式回复：
+【诗意画像】
+（古诗内容）
+
+【发展建议】
+1. （建议1）
+2. （建议2）
+3. （建议3）`;
+
+    try {
+      const res = await fetch('https://api.deepseek.com/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
+        body: JSON.stringify({
+          model: 'deepseek-chat',
+          messages: [
+            { role: 'system', content: '你是一位精通古典诗词的心理学专家。诗要优雅贴切有深度。严格遵循指定格式。' },
+            { role: 'user', content: prompt }
+          ],
+          temperature: 0.9, max_tokens: 600
+        })
+      });
+
+      if (!res.ok) throw new Error((await res.json().catch(()=>({}))).error?.message || `HTTP ${res.status}`);
+
+      const data = await res.json();
+      const raw = data.choices[0].message.content;
+      const poemMatch = raw.match(/【诗意画像】\s*([\s\S]*?)(?=【发展建议】|$)/);
+      const adviceMatch = raw.match(/【发展建议】\s*([\s\S]*)/);
+
+      resultDiv.innerHTML = `
+        <div style="font-size:.75rem;color:var(--muted);margin-bottom:8px">✨ DeepSeek V3 生成</div>
+        <div class="poem">${(poemMatch?.[1]||'').trim().replace(/\n/g,'<br>')}</div>
+        <div class="advice">${(adviceMatch?.[1]||'').trim().replace(/\n/g,'<br>')}</div>
+      `;
+      resultDiv.classList.add('show');
+      spinner.classList.remove('show');
+      return;
+    } catch (e) {
+      console.warn('API failed, falling back to algorithmic:', e.message);
+    }
+  }
+
+  // Fallback: algorithmic generation
   setTimeout(() => {
     const scores = calcScores();
-    const poem = buildPoem(scores);
-    const advice = buildAdvice(scores);
-
     resultDiv.innerHTML = `
-      <div class="poem">${poem}</div>
-      <div class="advice">${advice}</div>
+      <div style="font-size:.75rem;color:var(--muted);margin-bottom:8px">🔧 内置算法生成</div>
+      <div class="poem">${buildPoem(scores)}</div>
+      <div class="advice">${buildAdvice(scores)}</div>
     `;
     resultDiv.classList.add('show');
     spinner.classList.remove('show');
-  }, 600);
+  }, 300);
 }
+
+// Load saved key
+(function() {
+  const saved = localStorage.getItem('bf_api_key');
+  if (saved) document.getElementById('api-key-input').value = saved;
+})();
 
 function buildPoem(scores) {
   const lines = [];
