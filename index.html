@@ -11,9 +11,7 @@
 <style>
   :root {
     --bg: #f8f4ed; --card: #fefcf7; --text: #2c2416; --muted: #8b8172;
-    --accent: #8b5e4b; --seal: #8b2a1f;
-    --o: #5a4a3a; --c: #3a5a5a; --e: #6b4e3d; --a: #4a6b5a; --n: #7a4a4a;
-    --ink: #d4cdbc; --φ: 1.618;
+    --accent: #8b5e4b; --seal: #8b2a1f; --ink: #d4cdbc;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
   body {
@@ -38,7 +36,6 @@
   .trait-chip .label { font-weight:600; display:block; margin-bottom:2px; }
   .trait-chip .en { font-size:.72rem; color:var(--muted); }
 
-  /* Buttons */
   .btn { display:inline-block; padding:11px 32px; border:1px solid var(--ink); border-radius:3px; font-size:.92rem; cursor:pointer; transition:all .3s ease; background:transparent; color:var(--muted); font-family:inherit; letter-spacing:.06em; position:relative; overflow:hidden; }
   .btn-primary { background:var(--text); color:var(--card); border-color:var(--text); }
   .btn-primary:hover { background:#1a1510; border-color:#1a1510; }
@@ -46,7 +43,6 @@
   .btn-sm { padding:8px 22px; font-size:.82rem; }
   .btn-center { text-align:center; margin-top:12px; }
 
-  /* Test */
   .progress-wrap { margin-bottom:24px; }
   .progress-bar-bg { height:2px; background:var(--ink); overflow:hidden; }
   .progress-bar-fg { height:100%; background:var(--text); transition:width .4s ease; }
@@ -58,7 +54,6 @@
   .likert-btn.selected { background:var(--text); color:var(--card); font-weight:600; border-color:var(--text); }
   .nav-btns { display:flex; justify-content:space-between; gap:12px; margin-top:4px; }
 
-  /* Results */
   .results-header { text-align:center; margin-bottom:32px; }
   .results-header h2 { font-family:'Ma Shan Zheng','STKaiti','KaiTi',cursive; font-size:1.8rem; font-weight:400; margin-bottom:6px; position:relative; }
   .results-header h2::after { content:''; display:block; width:40px; height:1.5px; background:var(--accent); margin:14px auto 0; opacity:.4; }
@@ -75,24 +70,20 @@
   .fade-in { animation:fadeIn .5s ease; }
   @keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
 
-  /* 水墨纹理 */
   body::before { content:''; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.5; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E"); }
   #screen-welcome::before,#screen-welcome::after { content:''; position:absolute; left:24px; right:24px; height:1px; }
   #screen-welcome::before { top:-1px; background:linear-gradient(90deg,transparent,rgba(44,36,22,.1),transparent); }
   #screen-welcome::after { bottom:-1px; background:linear-gradient(90deg,transparent,rgba(44,36,22,.06),transparent); }
 
-  /* AI 古诗区 — 黄金分割布局 */
   .ai-section { margin-top:32px; padding:24px; background:var(--bg); border:1px solid var(--ink); border-radius:4px; }
   .ai-section h3 { font-size:1rem; margin-bottom:12px; display:flex; align-items:center; gap:8px; color:var(--muted); font-weight:400; }
   .ai-result { margin-top:16px; padding:28px 84px 28px 28px; background:var(--card); border:1px solid var(--ink); border-radius:2px; line-height:2.2; font-size:.92rem; white-space:pre-wrap; display:none; position:relative; min-height:120px; }
-  /* 诗区宽度 : 印章区留白 ≈ 1.618:1 */
   .ai-result.show { display:block; animation:fadeIn .6s ease; }
   .ai-result .poem { font-family:'Ma Shan Zheng','STKaiti','KaiTi',cursive; font-size:1.25rem; line-height:2.4; color:var(--text); letter-spacing:.06em; max-width:100%; }
   .spinner { display:none; width:16px; height:16px; border:2px solid var(--ink); border-top-color:var(--muted); border-radius:50%; animation:spin .6s linear infinite; }
   .spinner.show { display:inline-block; }
   @keyframes spin { to{transform:rotate(360deg)} }
 
-  /* 印章 — 真实篆刻造型 */
   .seal-copy {
     display:none; width:44px; height:62px;
     border:2px solid var(--seal); color:var(--seal);
@@ -100,14 +91,10 @@
     font-size:1.15rem; text-align:center; cursor:pointer;
     background:transparent; transform:rotate(-4deg);
     transition:all .35s ease;
-    position:absolute; right:18px;
-    /* 黄金分割：距底 = 距右 / φ ≈ 18/1.618 ≈ 11, but let top align with poem's first line */
-    top:28px;
+    position:absolute; right:18px; top:28px;
     user-select:none; letter-spacing:.08em; z-index:2;
-    /* 双线边框模拟印边 */
     box-shadow:inset 0 0 0 4px var(--card), inset 0 0 0 6px var(--seal);
     line-height:1.25; padding-top:10px;
-    /* 印泥质感 */
     text-shadow:0 1px 2px rgba(139,42,31,.2);
   }
   .seal-copy.show { display:block; }
@@ -117,11 +104,10 @@
     color:#6b2017;
   }
 
-  /* 墨滴动画 — 全局点击 + 印章 */
   .ink-ripple {
     position:absolute; border-radius:50%;
-    background:rgba(44,36,22,.12);
-    transform:scale(0); animation:ripple .7s ease-out; pointer-events:none;
+    background:rgba(44,36,22,.12); pointer-events:none;
+    transform:scale(0); animation:ripple .7s ease-out;
   }
   @keyframes ripple { to{transform:scale(4);opacity:0} }
   .seal-copy.inked { animation:sealBloom .75s ease-out; }
@@ -192,7 +178,6 @@ const Q=[
   {d:"N",t:"我经常感到焦虑或紧张。",r:0},{d:"N",t:"我很容易因为小事而情绪波动。",r:0},{d:"N",t:"我经常担心未来可能发生的事情。",r:0},{d:"N",t:"在压力下我依然能够保持冷静。",r:1},{d:"N",t:"我有时会突然感到悲伤或沮丧。",r:0},{d:"N",t:"我对自己有充足的信心。",r:1},{d:"N",t:"我容易被别人的批评所伤害。",r:0},{d:"N",t:"大多数时候我感到满足和平静。",r:1},{d:"N",t:"我经常反复思考自己的错误和不足。",r:0},{d:"N",t:"遇到突发状况时，我能从容应对。",r:1},
 ];
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}}
-shuffle(Q);
 
 const D={
   O:{cn:"开放性",en:"Openness",e:"✦",c:"#5a4a3a"},C:{cn:"尽责性",en:"Conscientiousness",e:"◆",c:"#3a5a5a"},
@@ -204,24 +189,26 @@ const DESC={O:{vh:"您在开放性维度上得分极高，是真正的探索者�
 let cur=0,poemText='';
 const ans=new Array(Q.length).fill(null);
 
-// 全局墨滴涟漪
+// 墨滴涟漪
 function ripple(e,el){
-  const r=document.createElement('span');
-  const s=Math.max(el.offsetWidth,el.offsetHeight);
-  r.className='ink-ripple';
-  r.style.width=r.style.height=s+'px';
+  const r=document.createElement('span'),s=Math.max(el.offsetWidth,el.offsetHeight);
+  r.className='ink-ripple';r.style.width=r.style.height=s+'px';
   r.style.left=(e.clientX-el.getBoundingClientRect().left-s/2)+'px';
   r.style.top=(e.clientY-el.getBoundingClientRect().top-s/2)+'px';
-  el.appendChild(r);
-  setTimeout(()=>r.remove(),700);
+  el.appendChild(r);setTimeout(()=>r.remove(),700);
 }
 document.addEventListener('click',e=>{
   const el=e.target.closest('.btn,.likert-btn,.trait-chip');
-  if(el) ripple(e,el);
+  if(el)ripple(e,el);
 });
 
-function startTest(){cur=0;ans.fill(null);S('screen-welcome','screen-results').map(id=>document.getElementById(id).classList.add('hidden'));document.getElementById('screen-test').classList.remove('hidden');renderQ();}
-function S(...ids){return ids}
+function startTest(){
+  cur=0;ans.fill(null);shuffle(Q);
+  document.getElementById('screen-welcome').classList.add('hidden');
+  document.getElementById('screen-results').classList.add('hidden');
+  document.getElementById('screen-test').classList.remove('hidden');
+  renderQ();
+}
 
 function renderQ(){
   const q=Q[cur],qt=document.getElementById('question-text');
@@ -258,8 +245,8 @@ function showResults(){
     type:'radar',data:{labels:ds.map(d=>D[d].e+' '+D[d].cn),datasets:[{data:ds.map(d=>sc[d]),backgroundColor:'rgba(44,36,22,.06)',borderColor:'rgba(44,36,22,.65)',borderWidth:1.5,pointBackgroundColor:ds.map(d=>D[d].c),pointBorderColor:'#fefcf7',pointBorderWidth:1.5,pointRadius:4}]},
     options:{responsive:true,maintainAspectRatio:true,scales:{r:{min:1,max:5,ticks:{stepSize:1,color:'#8b8172',backdropColor:'transparent',font:{size:10}},grid:{color:'rgba(44,36,22,.1)'},pointLabels:{color:'#2c2416',font:{size:12,family:"'Noto Serif SC',serif"}},angleLines:{color:'rgba(44,36,22,.08)'}}},plugins:{legend:{display:false}}}
   });
-  const det=document.getElementById('trait-details');det.innerHTML='';
-  ds.forEach(d=>{const i=D[d],s=sc[d],t=tier(s);det.innerHTML+=`<div class="trait-detail" style="border-left-color:${i.c}"><h3>${i.e} ${i.cn} <span style="font-weight:400;font-size:.85rem;color:var(--muted)">${i.en}</span></h3><div class="score-label">得分: <strong style="color:${i.c}">${s}</strong> / 5.0 — ${t.l} <span style="font-size:.75rem;color:var(--muted)">${t.g}</span></div><div class="score-bar-wrap"><div class="score-bar-fill" style="width:${((s-1)/4*100).toFixed(0)}%;background:${i.c}"></div></div><div class="desc">${DESC[d][t.k]}</div></div>`;});
+  let html='';ds.forEach(d=>{const i=D[d],s=sc[d],t=tier(s);html+=`<div class="trait-detail" style="border-left-color:${i.c}"><h3>${i.e} ${i.cn} <span style="font-weight:400;font-size:.85rem;color:var(--muted)">${i.en}</span></h3><div class="score-label">得分: <strong style="color:${i.c}">${s}</strong> / 5.0 — ${t.l} <span style="font-size:.75rem;color:var(--muted)">${t.g}</span></div><div class="score-bar-wrap"><div class="score-bar-fill" style="width:${((s-1)/4*100).toFixed(0)}%;background:${i.c}"></div></div><div class="desc">${DESC[d][t.k]}</div></div>`;});
+  document.getElementById('trait-details').innerHTML=html;
   document.getElementById('screen-results').scrollIntoView({behavior:'smooth'});genAI();
 }
 function restartTest(){ans.fill(null);cur=0;document.getElementById('screen-results').classList.add('hidden');document.getElementById('screen-test').classList.add('hidden');document.getElementById('screen-welcome').classList.remove('hidden');document.getElementById('screen-welcome').scrollIntoView({behavior:'smooth'});}
