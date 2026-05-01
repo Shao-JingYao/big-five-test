@@ -25,7 +25,7 @@
   .container { width:100%; max-width:720px; position:relative; z-index:1; }
   .card {
     background:var(--card); border:1px solid var(--ink); border-radius:4px;
-    padding:48px 40px; position:relative; box-shadow:0 1px 12px rgba(44,36,22,.06);
+    padding:48px 40px; box-shadow:0 1px 12px rgba(44,36,22,.06);
   }
   h1 { font-family:'Ma Shan Zheng','STKaiti','KaiTi',cursive; font-size:2.4rem; text-align:center; font-weight:400; color:var(--text); margin-bottom:10px; letter-spacing:.06em; }
   .subtitle { text-align:center; color:var(--muted); font-size:.85rem; margin-bottom:36px; letter-spacing:.1em; }
@@ -36,7 +36,7 @@
   .trait-chip .label { font-weight:600; display:block; margin-bottom:2px; }
   .trait-chip .en { font-size:.72rem; color:var(--muted); }
 
-  .btn { display:inline-block; padding:11px 32px; border:1px solid var(--ink); border-radius:3px; font-size:.92rem; cursor:pointer; transition:all .3s ease; background:transparent; color:var(--muted); font-family:inherit; letter-spacing:.06em; position:relative; }
+  .btn { display:inline-block; padding:11px 32px; border:1px solid var(--ink); border-radius:3px; font-size:.92rem; cursor:pointer; transition:all .3s ease; background:transparent; color:var(--muted); font-family:inherit; letter-spacing:.06em; }
   .btn-primary { background:var(--text); color:var(--card); border-color:var(--text); }
   .btn-primary:hover { background:#1a1510; border-color:#1a1510; }
   .btn-secondary:hover { border-color:var(--text); color:var(--text); background:rgba(44,36,22,.03); }
@@ -49,7 +49,7 @@
   .progress-text { text-align:right; font-size:.78rem; color:var(--muted); margin-top:8px; }
   .question-text { font-size:1.2rem; line-height:1.8; margin-bottom:32px; min-height:52px; }
   .likert { display:flex; justify-content:space-between; gap:6px; margin-bottom:28px; }
-  .likert-btn { flex:1; padding:13px 4px; border-radius:3px; border:1px solid transparent; background:rgba(44,36,22,.03); color:var(--muted); cursor:pointer; font-size:.8rem; text-align:center; font-family:inherit; letter-spacing:.04em; transition:all .25s ease; position:relative; }
+  .likert-btn { flex:1; padding:13px 4px; border-radius:3px; border:1px solid transparent; background:rgba(44,36,22,.03); color:var(--muted); cursor:pointer; font-size:.8rem; text-align:center; font-family:inherit; letter-spacing:.04em; transition:all .25s ease; }
   .likert-btn:hover { background:rgba(44,36,22,.07); color:var(--text); border-color:var(--ink); }
   .likert-btn.selected { background:var(--text); color:var(--card); font-weight:600; border-color:var(--text); }
   .nav-btns { display:flex; justify-content:space-between; gap:12px; margin-top:4px; }
@@ -84,34 +84,23 @@
   .spinner.show { display:inline-block; }
   @keyframes spin { to{transform:rotate(360deg)} }
 
-  /* 四字白文印章 — 右下落款 */
+  /* 四字白文印章 */
   .seal-copy {
     display:none; align-self:flex-end;
     width:60px; height:60px; margin-top:18px; margin-right:4px;
     background:var(--seal); color:var(--card);
     font-family:'Ma Shan Zheng','STKaiti','KaiTi',cursive;
-    font-size:1.2rem; text-align:center; cursor:pointer;
+    font-size:1.2rem; cursor:pointer;
     transform:rotate(-4deg); transition:all .35s ease;
-    user-select:none; letter-spacing:.1em; line-height:1.15;
-    border:3px solid var(--seal);
+    user-select:none; border:3px solid var(--seal);
     box-shadow:inset 0 0 0 2px var(--card);
-    display:flex; flex-wrap:wrap; justify-content:center; align-content:center;
-    padding:4px;
   }
-  .seal-copy span { width:50%; text-align:center; display:block; }
-  .seal-copy.show { display:flex; }
+  .seal-copy.show { display:flex; flex-wrap:wrap; justify-content:center; align-content:center; padding:4px; }
+  .seal-copy span { width:50%; text-align:center; }
   .seal-copy:hover {
     opacity:.9; transform:rotate(-2deg) scale(1.06);
     box-shadow:inset 0 0 0 2px var(--card), 0 2px 12px rgba(139,42,31,.2);
   }
-
-  /* 墨滴涟漪 */
-  .ink-ripple {
-    position:absolute; border-radius:50%; pointer-events:none;
-    background:rgba(44,36,22,.15); transform:scale(0);
-    animation:ripple .65s ease-out;
-  }
-  @keyframes ripple { to{transform:scale(4);opacity:0} }
 
   /* 印章朱砂绽放 */
   .seal-copy.inked { animation:sealBloom .75s ease-out; }
@@ -182,30 +171,13 @@ const Q=[
 ];
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}}
 
-const D={
-  O:{cn:"开放性",en:"Openness",e:"✦",c:"#5a4a3a"},C:{cn:"尽责性",en:"Conscientiousness",e:"◆",c:"#3a5a5a"},
-  E:{cn:"外向性",en:"Extraversion",e:"◈",c:"#6b4e3d"},A:{cn:"宜人性",en:"Agreeableness",e:"❖",c:"#4a6b5a"},
-  N:{cn:"神经质",en:"Neuroticism",e:"◉",c:"#7a4a4a"},
-};
+const D={O:{cn:"开放性",en:"Openness",e:"✦",c:"#5a4a3a"},C:{cn:"尽责性",en:"Conscientiousness",e:"◆",c:"#3a5a5a"},E:{cn:"外向性",en:"Extraversion",e:"◈",c:"#6b4e3d"},A:{cn:"宜人性",en:"Agreeableness",e:"❖",c:"#4a6b5a"},N:{cn:"神经质",en:"Neuroticism",e:"◉",c:"#7a4a4a"}};
 const DESC={O:{vh:"您在开放性维度上得分极高，是真正的探索者与创新者。Costa & McCrae 的研究表明，极高开放性者往往在发散思维测验中表现卓越，且跨文化适应性极强。您的认知需求（Need for Cognition）远高于常人，对抽象概念和美学体验有着不可遏制的渴望。",h:"您在开放性维度上得分较高，对新异体验保持积极的态度。您乐于探索不同的文化、观念和艺术形式，在创造力相关任务中往往有良好表现。您的好奇心使您在面对变化时展现出较强的适应弹性。",mh:"您的开放性中等偏高，在务实与探索之间保持着健康的平衡。您对经过验证的方法有信心，但也不排斥适度的创新。这种特质使您既能在结构化环境中稳定发挥，也能在必要时跳出框架思考。",ml:"您的开放性中等偏低，更倾向于可预测和稳定的环境。您重视经验的积累和传统智慧，在面对全新事物时会审慎评估风险。这种谨慎使您在需要精准执行和持续专注的领域中表现出色。",l:"您的开放性较低，偏好熟悉、可靠的模式。研究显示，低开放性者在执行功能和行为一致性上往往具有优势。您脚踏实地、重视实证，在需要稳定输出和规则遵循的领域中表现突出。",vl:"您的开放性非常低，对秩序和确定性有着强烈的需求。这并非局限——高度结构化的思维使您在需要严谨和专注的任务中有着天然优势。您对传统的珍视和对细节的把控能力值得肯定。"},C:{vh:"您在尽责性维度上得分极高，体现出卓越的自我调节能力与成就导向。Barrick & Mount 的元分析指出，尽责性是预测工作绩效和学术成就最稳定的人格维度。您的规划能力、延迟满足和执行纪律远超常人。",h:"您在尽责性维度上得分较高，做事有条理、可靠且自律。您善于制定计划并坚持执行，在需要长期投入的项目中能够保持稳定的产出。您的可信赖性使您在团队中常常扮演关键角色。",mh:"您的尽责性中等偏高，在重要事务上能够认真对待，同时懂得适时灵活调整。您具备良好的自我管理能力，能够在秩序与弹性之间找到适合的平衡点。",ml:"您的尽责性中等偏低，更倾向于灵活即兴的行为风格。您不喜欢被严格的规则和计划束缚，但在关键时刻能够集中精力完成任务。这种弹性在快速变化的环境中具有适应性优势。",l:"您的尽责性较低，偏好自由灵活的生活方式。行为激活系统（BAS）较为敏感的您，在需要快速适应和即兴发挥的场合中往往表现出色。不过，对于需要长期承诺的任务，适当的规划工具可能对您有帮助。",vl:"您的尽责性非常低，是纯粹的即兴主义者。您活在当下，不受计划的约束，拥有极强的环境适应性。您的创造力在无序中蓬勃生长，但若能将这份灵动与适度的结构化工具结合，或许能走得更远。"},E:{vh:"您在外向性维度上得分极高，是天生的社交能量源。Eysenck 的皮质唤醒理论认为，外向者较低的基线唤醒水平驱使其主动寻求社交刺激。您在人群中焕发活力，善于激活团队氛围并建立广泛的社交网络。",h:"您在外向性维度上得分较高，喜欢与人交流并在社交中获取能量。您健谈、热情，能够迅速融入新环境，在需要表达与影响力的场合中如鱼得水。",mh:"您的外向性中等偏高，既能享受社交的乐趣，也需要适时的独处来恢复内在能量。您在熟悉的圈子里活跃自如，在陌生环境中则会适度保持观察距离。这种平衡让您兼具表达力与内在深度。",ml:"您的外向性中等偏低，偏向内省和深度交流。Jung 将内倾定义为能量向内流动——您不需要大量社交来补充能量，在小范围的深刻对话中反而感到最充实。",l:"您的外向性较低，更喜欢安静和独处。内向并非缺陷——研究表明，内向者在深度思考、精细分析和独立创造上具有显著优势。您的社交圈虽小但深厚，专注于质量而非数量。",vl:"您的外向性非常低，是深度的内省者。您拥有极为丰富的内心世界和卓越的独立思考能力。大群体的喧嚣会使您疲惫——这并非弱点，而是您的神经系统高度精细处理信息的表现。"},A:{vh:"您在宜人性维度上得分极高，是温暖与合作的典范。Graziano 等人的研究指出，高宜人性者对他人情绪的觉察更为敏锐，倾向于采用建设性的冲突解决策略。您的共情能力和利他倾向使您在团队中成为不可或缺的凝聚力核心。",h:"您在宜人性维度上得分较高，乐于助人、信任他人且善于合作。您在人际交往中温和友善，能够敏锐感知他人的情绪和需求，在需要协作与关怀的领域发挥独特价值。",mh:"您的宜人性中等偏高，通常以合作态度待人，但在必要时能够坚持原则。您善于在不同意见间寻找平衡，既能维护关系和谐，也不失独立的判断力。",ml:"您的宜人性中等偏低，更注重实事求是的理性判断。您不轻易被情感因素左右决策，在需要冷静分析和坚定立场的场合中具有优势。适当保留质疑态度是批判性思维的重要组成部分。",l:"您的宜人性较低，倾向于独立思考和直率表达。低宜人性并不等同于攻击性——在谈判、科学辩论和高风险决策中，适度的质疑和果断是宝贵的资产。您敢于表达异见，不易受群体压力左右。",vl:"您的宜人性非常低，是典型的理性独立者。您几乎不受群体压力影响，敢于挑战共识。您的客观冷静和竞争中的果断是稀有品质，但在人际关系维护上可能需要有意识地投入更多关注。"},N:{vh:"您在神经质维度上得分极高，情绪体验深邃而丰富。边缘系统的高度活跃使您对环境刺激和潜在威胁极为敏感——这在艺术创作、深度共情和风险预判上可能是巨大的天赋。建议通过正念和情绪调节训练来驾驭这份敏感的锋芒。",h:"您在神经质维度上得分较高，情绪反应较为强烈。您对负面刺激的探测阈值较低，这使您容易感到焦虑，但也赋予了您对细节的敏锐觉察力。适当的放松和自我关怀对您维持心理平衡非常重要。",mh:"您的情绪敏感性中等偏高，多数情况下能够维持稳定，但特定压力情境下会有明显的波动。您具备基本的情绪调节能力，可以在扰动后较快恢复平衡。",ml:"您的情绪稳定性中等偏高，面对日常压力时能够较好地保持从容。前额叶的执行控制与边缘系统的情绪反应之间达到了较好的平衡。",l:"您在神经质维度上得分较低，情绪稳定性出色。您表现出较强的心理韧性（Psychological Resilience），在压力下能够维持认知功能的正常运作。这种稳定性使您在高压决策和长期项目中保持出色的表现。",vl:"您的情绪稳定性极高，拥有非凡的心理韧性。您从容淡定，即使在极端压力下也能保持清晰的判断力。您是团队中情绪的锚点——但请留意，偶尔放下理性、感受情绪的流动，也同样重要。"}};
 
 let cur=0,poemText='';
 const ans=new Array(Q.length).fill(null);
 
-function ripple(e,el){
-  const r=document.createElement('span'),s=Math.max(el.offsetWidth,el.offsetHeight);
-  r.className='ink-ripple';r.style.width=r.style.height=s+'px';
-  r.style.left=(e.clientX-el.getBoundingClientRect().left-s/2)+'px';
-  r.style.top=(e.clientY-el.getBoundingClientRect().top-s/2)+'px';
-  el.appendChild(r);setTimeout(()=>r.remove(),700);
-}
-document.addEventListener('click',e=>{
-  const el=e.target.closest('.btn,.likert-btn,.trait-chip,.seal-copy');
-  if(el)ripple(e,el);
-});
-
 function startTest(){cur=0;ans.fill(null);shuffle(Q);['screen-welcome','screen-results'].forEach(id=>document.getElementById(id).classList.add('hidden'));document.getElementById('screen-test').classList.remove('hidden');renderQ();}
-
 function renderQ(){
   const q=Q[cur],qt=document.getElementById('question-text');
   qt.textContent=(cur+1)+'. '+q.t;qt.classList.remove('fade-in');void qt.offsetWidth;qt.classList.add('fade-in');
