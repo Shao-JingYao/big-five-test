@@ -715,16 +715,23 @@ function shareResult() {
 function generateAI() {
   const spinner = document.getElementById('ai-spinner');
   const resultDiv = document.getElementById('ai-result');
+
+  // Cooldown: 3s between calls
+  if (generateAI._cooldown && Date.now() - generateAI._cooldown < 3000) {
+    return;
+  }
+  generateAI._cooldown = Date.now();
+
   spinner.classList.add('show');
   resultDiv.classList.remove('show');
   resultDiv.innerHTML = '';
 
-  // Rate limit: ~30/day per browser
+  // Rate limit: 15/day per browser
   const today = new Date().toDateString();
   const usage = JSON.parse(localStorage.getItem('_au') || '{"d":"","n":0}');
   if (usage.d !== today) { usage.d = today; usage.n = 0; }
-  if (usage.n > 30) {
-    resultDiv.innerHTML = '<span style="color:#ff6b6b">⚠️ 今日 AI 调用次数已用完，请明天再来。</span>';
+  if (usage.n >= 15) {
+    resultDiv.innerHTML = '<span style="color:#ff6b6b">⚠️ 今日额度已用完，请明天再来。</span>';
     resultDiv.classList.add('show');
     spinner.classList.remove('show');
     return;
@@ -737,16 +744,9 @@ function generateAI() {
     return `${DIM_NAMES[d].emoji}${DIM_NAMES[d].cn}(${DIM_NAMES[d].en}): ${scores[d]}/5.0 — ${tier.label}`;
   }).join('\n');
 
-  const prompt = `你是一位心理学诗人。根据以下大五人格测评结果，为用户创作一首七言律诗（共8句），前6句贴合用户的性格特质进行诗意画像，最后2句转为个性化发展建言（鼓励、指引或提醒），要求全诗押韵、有深度。
+  const prompt = `根据以下大五人格分数创作七言律诗（8句），前6句画像后2句建言，押韵。只输出诗，不要说明。
 
-${profile}
-
-只输出古诗，不要任何额外说明。格式示例：
-心海浮沉自有因，
-奇思妙想逐风尘。
-……（中间四句）
-……，
-莫负韶华且自珍。`;
+${profile}`;
 
   // Decode embedded key
   var _x1='c2stY2Vi';var _x2='MTkzNzdlNTBk';var _x3='NDc2ZWE5MWVk';var _x4='OWY0YmNhYTFiMjk=';
@@ -758,10 +758,10 @@ ${profile}
     body: JSON.stringify({
       model: 'deepseek-chat',
       messages: [
-        { role: 'system', content: '你是一位精通古典诗词的心理学专家。诗要优雅贴切有深度。严格遵循指定格式。' },
+        { role: 'system', content: '你是心理学诗人。根据大五人格分数创作七言律诗（8句），前6句画像后2句建言，押韵。只输出诗。' },
         { role: 'user', content: prompt }
       ],
-      temperature: 0.9, max_tokens: 500
+      temperature: 0.9, max_tokens: 200
     })
   }).then(res => {
     if (!res.ok) throw new Error('API error');
