@@ -283,7 +283,6 @@
       <div class="progress-bar-bg"><div class="progress-bar-fg" id="progress-bar" style="width:0%"></div></div>
       <div class="progress-text" id="progress-text">1 / 50</div>
     </div>
-    <div class="dimension-label" id="dim-tag">开放性</div>
     <div class="question-text fade-in" id="question-text"></div>
     <div class="likert" id="likert-group"></div>
     <div class="nav-btns">
@@ -378,6 +377,15 @@ const questions = [
   { d:"N", t:"遇到突发状况时，我能从容应对。", r:true },
 ];
 
+// Fisher-Yates shuffle — randomize question order
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
+shuffle(questions);
+
 const DIM_NAMES = {
   O: { cn:"开放性", en:"Openness", emoji:"🎨", color:"#ff6b9d", low:"保守传统", high:"开放创新" },
   C: { cn:"尽责性", en:"Conscientiousness", emoji:"🎯", color:"#4ecdc4", low:"随性灵活", high:"自律严谨" },
@@ -388,24 +396,44 @@ const DIM_NAMES = {
 
 const DESC = {
   O: {
-    high: "您具有高度的开放性，热爱探索未知领域，充满好奇心和创造力。您欣赏艺术之美，乐于接受新观念，思维灵活而广阔。您可能喜欢旅行、阅读、学习新技能，对抽象概念和哲学问题有浓厚兴趣。",
-    low: "您的开放性较低，更偏好熟悉和稳定的事物。您务实、传统，注重具体事实而非抽象理论。您在有明确规则和既定流程的环境中感到最舒适，不喜欢频繁的变化和不确定的冒险。"
+    vh: "您具有极高的开放性，是真正的探索者和创新者。您对艺术、文化和抽象概念有强烈的热情，喜欢打破常规、尝试全新体验。您的思维灵活而广阔，常常产生独特的洞见和创意。",
+    h: "您具有较高的开放性，对新事物持欢迎态度，乐于探索不同文化和观念。您有一定的创造力和好奇心，在熟悉与未知之间保持良好平衡。",
+    mh: "您的开放性中等偏高，既有务实的一面，也对新鲜体验抱有兴趣。您能够在必要的时候跳出舒适圈，但不轻易放弃熟悉的框架。",
+    ml: "您的开放性中等偏低，更倾向于可预测和稳定的环境。您对已经验证过的方法更有信心，面对变化时会谨慎评估。",
+    l: "您的开放性较低，偏好熟悉、可靠和传统的模式。您务实且脚踏实地，重视经验胜过抽象理论，在有明确规则的领域表现优异。",
+    vl: "您的开放性非常低，非常偏好稳定和秩序。您对不确定性感到不适，习惯于按既定流程行事。您的优势在于专注和坚持，能够在结构化环境中做到极致。"
   },
   C: {
-    high: "您具有高度的尽责性，做事有条理、自律性强。您善于制定计划并坚持执行，注重细节和品质。您值得信赖，在工作和学习中通常表现优异，能够延迟满足以实现长期目标。",
-    low: "您的尽责性较低，更倾向于随性灵活的生活方式。您可能不太喜欢严格的计划和规则，更善于适应变化和即兴发挥。您在轻松自由的环境中能发挥出最佳状态。"
+    vh: "您具有极高的尽责性，是典型的自驱型完美主义者。您善于规划、执行到位，注重每一个细节。您值得深度信赖，在长期目标上展现出惊人的毅力和纪律。",
+    h: "您具有较高的尽责性，做事有条理且可靠。您能够有效管理时间和任务，在大多数情况下都能按时高质量完成工作。",
+    mh: "您的尽责性中等偏高，在重要事务上能够认真对待，但也懂得适时放松。您有一定的组织能力，能在结构和灵活性之间找到平衡。",
+    ml: "您的尽责性中等偏低，更倾向于随性而为。您不喜欢被严格的计划束缚，但在关键时刻能够集中精力完成任务。",
+    l: "您的尽责性较低，偏好自由灵活的生活方式。您可能不太在意细节和秩序，但适应能力强，能在变化环境中快速行动。",
+    vl: "您的尽责性非常低，完全是随性主义者。您活在当下，不喜欢计划和约束。您的优势在于极强的适应性和即兴发挥能力，但在需要长期承诺的事务上可能需要额外注意。"
   },
   E: {
-    high: "您具有高度的外向性，喜欢与人交往，在社交场合中精力充沛。您热情、健谈、擅长活跃气氛。您乐于成为关注的焦点，喜欢快节奏的生活和新鲜的社交体验。",
-    low: "您偏向内向，更喜欢独处或小范围的深入交流。您在安静的环境中感到最舒适，善于深度思考和细致观察。您不追求热闹的社交，但在亲密关系中有深刻的连接。"
+    vh: "您具有极高的外向性，是天生的社交明星。您在人群中焕发活力，善于带动气氛和激励他人。您喜欢快节奏、高刺激的环境，是聚会的灵魂人物。",
+    h: "您具有较高的外向性，喜欢与人交流和参与社交活动。您健谈、热情，在群体中通常扮演活跃角色，能迅速融入新环境。",
+    mh: "您的外向性中等偏高，既能享受社交的乐趣，也需要独处来恢复能量。您在熟悉的社交圈中表现活跃，面对陌生人时会适度保持距离。",
+    ml: "您的外向性中等偏低，更偏向内省和深度交流。您不喜欢表面的社交，但在小范围亲密关系中能够深入连接。",
+    l: "您偏向内向，更喜欢安静和独处的时光。您在独自思考时能量最足，善于深度分析和细致观察。您的社交圈虽小但亲密深厚。",
+    vl: "您高度内向，是非常深度的内省者。您几乎不需要外界刺激就能保持充实，拥有丰富的内心世界和强大的独立思考能力。大群体社交会让您感到疲惫，您更适合一对一或小范围的深度交流。"
   },
   A: {
-    high: "您具有高度的宜人性，温暖、善良、富有同情心。您乐于助人、信任他人，善于合作与妥协。您在团队中通常是润滑剂般的角色，能够敏锐感知他人的情绪和需要。",
-    low: "您的宜人性较低，更倾向于独立思考和理性判断。您敢于表达不同意见，在竞争中不轻易妥协。您在需要客观分析和坚定决策的场合中表现出色。"
+    vh: "您具有极高的宜人性，是真正的和平使者和利他主义者。您天生富有同情心，优先考虑他人感受和团队和谐。您愿意付出、善于合作，是团队中最温暖的力量。",
+    h: "您具有较高的宜人性，善良、乐于助人、相信他人的善意。您在人际交往中温和友善，善于化解矛盾，是大家信赖的伙伴。",
+    mh: "您的宜人性中等偏高，通常以合作态度待人，但在必要时也能坚持立场。您在不同意见间能找到平衡，既顾及关系也注重原则。",
+    ml: "您的宜人性中等偏低，更注重实事求是的理性判断。您不轻易被情感左右，敢于提出不同意见，在竞争环境中能够保持冷静和竞争力。",
+    l: "您的宜人性较低，倾向于独立思考和直率表达。您不怕冲突，在需要坚定立场和批判性思维的场景中表现出色。",
+    vl: "您的宜人性非常低，是典型的理性独立者。您几乎不受群体压力影响，敢于挑战共识。您的优势在于客观、冷静和竞争中的果断，但在维护人际关系上可能需要额外注意。"
   },
   N: {
-    high: "您的神经质（情绪敏感性）较高，情绪体验丰富而深刻。您对压力和威胁更加敏感，容易产生焦虑或担忧。您的敏感也让您有更强的共情能力和对细节的觉察力。",
-    low: "您的情绪稳定性很高，面对压力时能保持从容冷静。您心态平和、自信乐观，不容易被负面情绪困扰。您在高压环境下依然能够保持良好状态，具有出色的心理韧性。"
+    vh: "您的情绪敏感性非常高，内心体验丰富而强烈。您对环境和他人情绪极为敏感，这在艺术创作和共情方面是巨大的天赋。建议学习正念和情绪调节技巧来驾驭这份敏感的力量。",
+    h: "您的情绪敏感性较高，容易受到压力和负面情绪的影响。您对细节和潜在威胁有敏锐的觉察力，但也因此容易焦虑。适当的放松和自我关怀对您非常重要。",
+    mh: "您的情绪敏感性中等偏高，在多数情况下能够保持稳定，但特定情境下会有明显的情绪波动。您具备基本的应对能力，可以在压力下恢复平衡。",
+    ml: "您的情绪稳定性中等偏高，面对压力时能较好地保持从容。您心态较为平和，不容易被小事困扰，整体的心理韧性良好。",
+    l: "您的情绪稳定性较高，能在压力下保持冷静和理智。您乐观自信，不容易被负面情绪困扰，具备出色的心理调节能力。",
+    vl: "您的情绪稳定性极高，拥有非凡的心理韧性。您从容淡定，即使在极端压力下也能保持清晰的判断。您是团队中的定海神针，但注意不要忽视自己和他人的情感需求。"
   }
 };
 
@@ -426,9 +454,6 @@ function startTest() {
 // ---- Render question ----
 function renderQuestion() {
   const q = questions[currentIdx];
-  const dim = DIM_NAMES[q.d];
-  document.getElementById('dim-tag').textContent = dim.emoji + ' ' + dim.cn;
-  document.getElementById('dim-tag').style.color = dim.color;
   const qt = document.getElementById('question-text');
   qt.textContent = (currentIdx+1) + '. ' + q.t;
   qt.classList.remove('fade-in');
@@ -500,10 +525,14 @@ function calcScores() {
   return result;
 }
 
-function pctToLabel(s) {
-  if (s >= 4) return '高';
-  if (s >= 2.5) return '中等';
-  return '低';
+function scoreToTier(s) {
+  const num = parseFloat(s);
+  if (num >= 4.5) return { key:'vh', label:'非常高', grade:'A+' };
+  if (num >= 4.0) return { key:'h',  label:'较高',   grade:'A' };
+  if (num >= 3.2) return { key:'mh', label:'中等偏高', grade:'B' };
+  if (num >= 2.6) return { key:'ml', label:'中等偏低', grade:'C' };
+  if (num >= 2.0) return { key:'l',  label:'较低',   grade:'D' };
+  return { key:'vl', label:'非常低', grade:'E' };
 }
 
 // ---- Show results ----
@@ -574,13 +603,13 @@ function showResults() {
   dims.forEach(d => {
     const info = DIM_NAMES[d];
     const score = scores[d];
-    const level = pctToLabel(score);
-    const descText = level === '高' ? DESC[d].high : (level === '低' ? DESC[d].low : '您的' + info.cn + '处于中等水平，兼具两端的特质。');
+    const tier = scoreToTier(score);
+    const descText = DESC[d][tier.key];
     const barPct = ((score-1)/4*100).toFixed(0);
     det.innerHTML += `
       <div class="trait-detail" style="border-left-color:${info.color}">
         <h3>${info.emoji} ${info.cn} <span style="font-weight:400;font-size:.85rem;color:var(--muted)">${info.en}</span></h3>
-        <div class="score-label">得分: <strong style="color:${info.color}">${score}</strong> / 5.0 — ${level} (${score >= 3 ? info.high : info.low})</div>
+        <div class="score-label">得分: <strong style="color:${info.color}">${score}</strong> / 5.0 — ${tier.label} <span style="font-size:.75rem;color:var(--muted)">${tier.grade}</span></div>
         <div class="score-bar-wrap"><div class="score-bar-fill" style="width:${barPct}%;background:${info.color}"></div></div>
         <div class="desc">${descText}</div>
       </div>
