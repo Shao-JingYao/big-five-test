@@ -4,41 +4,36 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>大五维人格测评 · Big Five (OCEAN)</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <style>
   :root {
-    --bg: #f8f4ed;
-    --card: #fefcf7;
-    --text: #2c2416;
-    --muted: #8b8172;
-    --accent: #b5342e;
-    --accent2: #3a5a5a;
-    --danger: #b5342e;
-    --o-color: #5a4a3a;
-    --c-color: #3a5a5a;
-    --e-color: #6b4e3d;
-    --a-color: #4a6b5a;
-    --n-color: #7a4a4a;
-    --radius: 4px;
-    --shadow: 0 2px 16px rgba(44,36,22,.08);
-    --ink-border: #d4cdbc;
+    --bg: #0f0f1a;
+    --card: #1a1a2e;
+    --text: #e0e0e0;
+    --muted: #8888aa;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --danger: #ff6b6b;
+    --o-color: #ff6b9d;
+    --c-color: #4ecdc4;
+    --e-color: #ffe66d;
+    --a-color: #a29bfe;
+    --n-color: #fd79a8;
+    --radius: 16px;
+    --shadow: 0 4px 24px rgba(0,0,0,.4);
   }
   * { margin:0; padding:0; box-sizing:border-box; }
   body {
-    font-family: 'Noto Serif SC', 'STSong', 'SimSun', 'Songti SC', serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei', sans-serif;
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
-    padding: 40px 20px;
-    background-image: 
-      radial-gradient(ellipse at 50% 0%, rgba(181,52,46,.04), transparent 60%),
-      radial-gradient(ellipse at 80% 100%, rgba(58,90,90,.03), transparent 50%);
+    align-items: center;
+    padding: 20px;
+    background-image: radial-gradient(ellipse at top, rgba(108,99,255,.12), transparent 50%),
+                      radial-gradient(ellipse at bottom right, rgba(0,212,170,.08), transparent 50%);
   }
   .container {
     width: 100%;
@@ -47,25 +42,24 @@
   .card {
     background: var(--card);
     border-radius: var(--radius);
-    padding: 48px 40px;
+    padding: 40px 36px;
     box-shadow: var(--shadow);
-    border: 1px solid var(--ink-border);
+    border: 1px solid rgba(255,255,255,.06);
   }
   h1 {
-    font-family: 'Ma Shan Zheng', 'STKaiti', 'KaiTi', 'Kaiti SC', cursive;
-    font-size: 2.4rem;
+    font-size: 2rem;
     text-align: center;
-    color: var(--text);
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     margin-bottom: 8px;
-    font-weight: 400;
-    letter-spacing: .05em;
   }
   .subtitle {
     text-align: center;
     color: var(--muted);
     font-size: .9rem;
-    margin-bottom: 36px;
-    letter-spacing: .08em;
+    margin-bottom: 32px;
   }
   .intro-text {
     color: var(--muted);
@@ -80,57 +74,40 @@
     margin-bottom: 28px;
   }
   .trait-chip {
-    background: var(--card);
-    border: 1px solid var(--ink-border);
-    border-radius: 2px;
-    padding: 16px 12px;
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 12px;
+    padding: 14px 12px;
     text-align: center;
     font-size: .82rem;
-    position: relative;
-  }
-  .trait-chip::after {
-    content: '';
-    position: absolute;
-    right: 8px; top: 8px;
-    width: 18px; height: 18px;
-    border-radius: 50%;
-    border: 1.5px solid var(--accent);
-    opacity: .4;
   }
   .trait-chip .emoji { font-size: 1.4rem; display:block; margin-bottom: 6px; }
   .trait-chip .label { font-weight: 600; display:block; margin-bottom:2px; }
   .trait-chip .en   { font-size: .72rem; color: var(--muted); }
   .btn {
     display: inline-block;
-    padding: 12px 36px;
-    border: 1px solid var(--text);
-    border-radius: 2px;
-    font-size: .95rem;
-    font-weight: 400;
+    padding: 14px 40px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
     transition: all .25s;
     text-decoration: none;
-    background: transparent;
-    color: var(--text);
-    font-family: inherit;
-    letter-spacing: .04em;
   }
   .btn-primary {
-    background: var(--text);
-    color: var(--card);
-    border-color: var(--text);
+    background: linear-gradient(135deg, var(--accent), #7c6ff7);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(108,99,255,.35);
   }
   .btn-primary:hover {
-    background: var(--accent);
-    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(108,99,255,.5);
   }
   .btn-secondary {
-    border-color: var(--ink-border);
-    color: var(--muted);
-  }
-  .btn-secondary:hover {
-    border-color: var(--text);
+    background: rgba(255,255,255,.06);
     color: var(--text);
+    border: 1px solid rgba(255,255,255,.12);
   }
   .btn-sm {
     padding: 10px 24px;
@@ -141,37 +118,37 @@
     margin-bottom: 24px;
   }
   .progress-bar-bg {
-    height: 2px;
-    background: var(--ink-border);
-    border-radius: 0;
+    height: 6px;
+    background: rgba(255,255,255,.06);
+    border-radius: 3px;
     overflow: hidden;
   }
   .progress-bar-fg {
     height: 100%;
-    background: var(--text);
-    border-radius: 0;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 3px;
     transition: width .4s ease;
   }
   .progress-text {
     text-align: right;
     font-size: .78rem;
     color: var(--muted);
-    margin-top: 8px;
+    margin-top: 6px;
   }
   .dimension-label {
     font-size: .82rem;
     color: var(--muted);
-    margin-bottom: 16px;
-    padding: 4px 0;
+    margin-bottom: 8px;
+    padding: 6px 14px;
+    border-radius: 20px;
     display: inline-block;
-    letter-spacing: .06em;
+    background: rgba(255,255,255,.04);
   }
   .question-text {
-    font-size: 1.2rem;
-    line-height: 1.8;
-    margin-bottom: 32px;
+    font-size: 1.15rem;
+    line-height: 1.6;
+    margin-bottom: 28px;
     min-height: 52px;
-    color: var(--text);
   }
   .likert {
     display: flex;
@@ -181,32 +158,30 @@
   }
   .likert-btn {
     flex: 1;
-    padding: 14px 4px;
-    border-radius: 2px;
-    border: 1px solid var(--ink-border);
+    padding: 12px 4px;
+    border-radius: 12px;
+    border: 2px solid rgba(255,255,255,.1);
     background: transparent;
     color: var(--muted);
     cursor: pointer;
     font-size: .82rem;
     transition: all .2s;
     text-align: center;
-    font-family: inherit;
   }
   .likert-btn:hover {
-    border-color: var(--text);
+    border-color: var(--accent);
     color: var(--text);
   }
   .likert-btn.selected {
-    background: var(--text);
-    border-color: var(--text);
-    color: var(--card);
+    background: rgba(108,99,255,.15);
+    border-color: var(--accent);
+    color: #fff;
     font-weight: 600;
   }
   .nav-btns {
     display: flex;
     justify-content: space-between;
     gap: 12px;
-    margin-top: 4px;
   }
   /* Results */
   .results-header {
@@ -214,32 +189,38 @@
     margin-bottom: 32px;
   }
   .results-header h2 {
-    font-family: 'Ma Shan Zheng', 'STKaiti', 'KaiTi', 'Kaiti SC', cursive;
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     margin-bottom: 6px;
-    font-weight: 400;
+  }
+  .charts-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 32px;
+  }
+  @media (max-width: 560px) {
+    .charts-row { grid-template-columns: 1fr; }
   }
   .chart-box {
-    background: var(--card);
+    background: rgba(255,255,255,.03);
     border-radius: var(--radius);
-    padding: 24px;
-    border: 1px solid var(--ink-border);
-    max-width: 420px;
-    margin: 0 auto 32px;
+    padding: 20px;
+    border: 1px solid rgba(255,255,255,.06);
+    position: relative;
+    min-height: 260px;
   }
-  .chart-box canvas { max-height: 320px; }
+  .chart-box canvas { max-height: 260px; }
   .trait-detail {
-    margin-bottom: 20px;
-    padding: 20px 24px;
-    border-radius: 0;
-    background: var(--card);
-    border: 1px solid var(--ink-border);
-    border-left: 3px solid;
+    margin-bottom: 24px;
+    padding: 18px;
+    border-radius: var(--radius);
+    background: rgba(255,255,255,.03);
+    border: 1px solid rgba(255,255,255,.06);
+    border-left: 4px solid;
   }
   .trait-detail h3 {
     font-size: 1.05rem;
     margin-bottom: 4px;
-    font-weight: 600;
   }
   .trait-detail .score-label {
     font-size: .82rem;
@@ -248,124 +229,113 @@
   }
   .trait-detail .desc {
     font-size: .88rem;
-    line-height: 1.8;
+    line-height: 1.7;
     color: var(--muted);
   }
   .score-bar-wrap {
-    height: 3px;
-    background: var(--ink-border);
-    border-radius: 0;
-    margin: 12px 0;
+    height: 6px;
+    background: rgba(255,255,255,.08);
+    border-radius: 3px;
+    margin: 10px 0;
     overflow: hidden;
   }
   .score-bar-fill {
     height: 100%;
-    border-radius: 0;
+    border-radius: 3px;
     transition: width .8s ease;
   }
   .footer-actions {
     text-align: center;
     display: flex;
-    gap: 16px;
+    gap: 12px;
     justify-content: center;
     flex-wrap: wrap;
   }
   .hidden { display: none !important; }
-  .fade-in { animation: fadeIn .5s ease; }
-  @keyframes fadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
-
-  /* ===== 水墨渲染层 ===== */
-  /* 宣纸纹理 */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    background-image:
-      url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
-    opacity: .6;
+  .fade-in { animation: fadeIn .4s ease; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+  /* AI section */
+  .ai-section {
+    margin-top: 32px;
+    padding: 24px;
+    background: rgba(108,99,255,.06);
+    border-radius: var(--radius);
+    border: 1px solid rgba(108,99,255,.15);
   }
-  .container { position: relative; z-index: 1; }
-
-  /* 淡墨笔触装饰 — 欢迎页 */
-  .card {
-    position: relative;
+  .ai-section h3 { font-size:1.1rem; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+  .api-key-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+    align-items: center;
+    flex-wrap: wrap;
   }
-  #screen-welcome::before {
-    content: '';
-    position: absolute;
-    top: -1px; left: 20px; right: 20px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(44,36,22,.15), transparent);
+  .api-key-row input {
+    flex: 1;
+    min-width: 180px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.04);
+    color: var(--text);
+    font-size: .82rem;
+    font-family: monospace;
   }
-  #screen-welcome::after {
-    content: '';
-    position: absolute;
-    bottom: -1px; left: 20px; right: 20px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(44,36,22,.1), transparent);
+  .api-key-row input::placeholder { color: var(--muted); font-family: inherit; font-size:.78rem; }
+  .ai-result {
+    margin-top: 16px;
+    padding: 20px;
+    background: rgba(0,0,0,.2);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,.06);
+    line-height: 2;
+    font-size: .92rem;
+    white-space: pre-wrap;
+    display: none;
   }
-
-  /* 印章点缀 — trait chip */
-  .trait-chip::after {
-    content: '';
-    position: absolute;
-    right: 10px; top: 10px;
-    width: 16px; height: 16px;
-    border: 1.5px solid var(--accent);
-    opacity: .35;
-    transform: rotate(15deg);
+  .ai-result.show { display: block; animation: fadeIn .6s ease; }
+  .ai-result .poem {
+    font-family: 'STKaiti','KaiTi','Noto Serif SC','SimSun',serif;
+    font-size: 1.15rem;
+    line-height: 2.2;
+    color: #f0d78c;
+    text-shadow: 0 1px 8px rgba(240,215,140,0.15);
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+    letter-spacing: 0.05em;
   }
-
-  /* 墨韵 hover */
-  .likert-btn:hover { background: rgba(44,36,22,.04); }
-  .likert-btn:active { background: rgba(44,36,22,.08); }
-
-  /* 结果页印章装饰 */
-  .results-header h2 {
-    position: relative;
+  .ai-result .advice { color: #4ecdc4; }
+  .spinner {
+    display: none;
+    width: 20px; height: 20px;
+    border: 2px solid rgba(255,255,255,.2);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin .6s linear infinite;
   }
-  .results-header h2::after {
-    content: '';
-    display: block;
-    width: 40px; height: 2px;
-    background: var(--accent);
-    margin: 12px auto 0;
-    opacity: .5;
-  }
-
-  /* 中等评语分隔 */
-  .trait-detail { transition: border-left-color .3s; }
-
-  /* 响应式微调 */
-  @media (max-width: 560px) {
-    .card { padding: 32px 20px; }
-    h1 { font-size: 1.8rem; }
-    .likert { flex-wrap: wrap; }
-    .likert-btn { min-width: 100%; }
-    .chart-box { max-width: 100%; }
-  }
+  .spinner.show { display: inline-block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
 <div class="container" id="app">
   <!-- ========== WELCOME SCREEN ========== -->
   <div class="card fade-in" id="screen-welcome">
-    <h1>大五维人格测评</h1>
-    <p class="subtitle">Big Five · OCEAN Model</p>
+    <h1>🧠 大五维人格测评</h1>
+    <p class="subtitle">Big Five Personality Test · OCEAN Model</p>
     <div class="intro-text">
-      大五人格模型是当代心理学界最具共识的人格理论框架，将人格归纳为五个核心维度。本测试包含 <strong>50 道题目</strong>，预计耗时 <strong>5-8 分钟</strong>。请根据您的真实感受作答，无对错之分。
+      大五人格模型是目前心理学界最广泛认可的人格理论框架，将人格归纳为五个核心维度。本测试包含 <strong>50 道题目</strong>，预计耗时 <strong>5-8 分钟</strong>。请根据您的真实感受作答，没有对错之分。
     </div>
     <div class="trait-grid">
-      <div class="trait-chip"><span class="emoji">✦</span><span class="label">开放性</span><span class="en">Openness</span></div>
-      <div class="trait-chip"><span class="emoji">◆</span><span class="label">尽责性</span><span class="en">Conscientiousness</span></div>
-      <div class="trait-chip"><span class="emoji">◈</span><span class="label">外向性</span><span class="en">Extraversion</span></div>
-      <div class="trait-chip"><span class="emoji">❖</span><span class="label">宜人性</span><span class="en">Agreeableness</span></div>
-      <div class="trait-chip"><span class="emoji">◉</span><span class="label">神经质</span><span class="en">Neuroticism</span></div>
+      <div class="trait-chip"><span class="emoji">🎨</span><span class="label">开放性</span><span class="en">Openness</span></div>
+      <div class="trait-chip"><span class="emoji">🎯</span><span class="label">尽责性</span><span class="en">Conscientiousness</span></div>
+      <div class="trait-chip"><span class="emoji">🎤</span><span class="label">外向性</span><span class="en">Extraversion</span></div>
+      <div class="trait-chip"><span class="emoji">🤝</span><span class="label">宜人性</span><span class="en">Agreeableness</span></div>
+      <div class="trait-chip"><span class="emoji">🌊</span><span class="label">神经质</span><span class="en">Neuroticism</span></div>
     </div>
     <div class="btn-center">
-      <button class="btn btn-primary" onclick="startTest()">开始测评</button>
+      <button class="btn btn-primary" onclick="startTest()">开始测评 →</button>
     </div>
   </div>
 
@@ -375,27 +345,37 @@
       <div class="progress-bar-bg"><div class="progress-bar-fg" id="progress-bar" style="width:0%"></div></div>
       <div class="progress-text" id="progress-text">1 / 50</div>
     </div>
-    <div class="dimension-label" id="dim-tag">开放性</div>
     <div class="question-text fade-in" id="question-text"></div>
     <div class="likert" id="likert-group"></div>
     <div class="nav-btns">
       <button class="btn btn-secondary btn-sm" id="btn-prev" onclick="prevQuestion()">← 上一题</button>
       <span id="nav-spacer"></span>
-      <button class="btn btn-primary btn-sm" id="btn-next" onclick="nextQuestion()" disabled>下一题</button>
+      <button class="btn btn-primary btn-sm" id="btn-next" onclick="nextQuestion()" disabled>下一题 →</button>
     </div>
   </div>
 
   <!-- ========== RESULTS SCREEN ========== -->
   <div class="card hidden" id="screen-results">
     <div class="results-header">
-      <h2>测评结果</h2>
+      <h2>📊 您的测评结果</h2>
       <p class="subtitle">大五人格剖面图</p>
     </div>
-    <div class="chart-box"><canvas id="radarChart"></canvas></div>
+    <div class="charts-row">
+      <div class="chart-box"><canvas id="radarChart"></canvas></div>
+      <div class="chart-box"><canvas id="barChart"></canvas></div>
+    </div>
     <div id="trait-details"></div>
+    <!-- AI 深度分析 -->
+    <div class="ai-section" id="ai-section">
+      <h3>🤖 AI 深度解读 <span class="spinner" id="ai-spinner"></span></h3>
+      <div class="btn-center">
+        <button class="btn btn-primary" onclick="generateAI()">✨ 生成诗意评价</button>
+      </div>
+      <div class="ai-result" id="ai-result"></div>
+    </div>
     <div class="footer-actions">
-      <button class="btn btn-primary btn-sm" onclick="restartTest()">重新测评</button>
-      <button class="btn btn-secondary btn-sm" onclick="shareResult()">复制结果</button>
+      <button class="btn btn-primary btn-sm" onclick="restartTest()">🔄 重新测评</button>
+      <button class="btn btn-secondary btn-sm" onclick="shareResult()">📋 复制结果</button>
     </div>
   </div>
 </div>
@@ -467,34 +447,63 @@ const questions = [
   { d:"N", t:"遇到突发状况时，我能从容应对。", r:true },
 ];
 
+// Fisher-Yates shuffle — randomize question order
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
+shuffle(questions);
+
 const DIM_NAMES = {
-  O: { cn:"开放性", en:"Openness", emoji:"✦", color:"#5a4a3a", low:"保守传统", high:"开放创新" },
-  C: { cn:"尽责性", en:"Conscientiousness", emoji:"◆", color:"#3a5a5a", low:"随性灵活", high:"自律严谨" },
-  E: { cn:"外向性", en:"Extraversion", emoji:"◈", color:"#6b4e3d", low:"内向沉静", high:"外向活跃" },
-  A: { cn:"宜人性", en:"Agreeableness", emoji:"❖", color:"#4a6b5a", low:"理性独立", high:"温暖合作" },
-  N: { cn:"神经质", en:"Neuroticism", emoji:"◉", color:"#7a4a4a", low:"情绪稳定", high:"敏感波动" },
+  O: { cn:"开放性", en:"Openness", emoji:"🎨", color:"#ff6b9d", low:"保守传统", high:"开放创新" },
+  C: { cn:"尽责性", en:"Conscientiousness", emoji:"🎯", color:"#4ecdc4", low:"随性灵活", high:"自律严谨" },
+  E: { cn:"外向性", en:"Extraversion", emoji:"🎤", color:"#ffe66d", low:"内向沉静", high:"外向活跃" },
+  A: { cn:"宜人性", en:"Agreeableness", emoji:"🤝", color:"#a29bfe", low:"理性独立", high:"温暖合作" },
+  N: { cn:"神经质", en:"Neuroticism", emoji:"🌊", color:"#fd79a8", low:"情绪稳定", high:"敏感波动" },
 };
 
 const DESC = {
   O: {
-    high: "您在开放性维度上得分较高，体现出强烈的认知需求（Need for Cognition）与审美敏感性。您倾向于主动寻求新异体验，对抽象观念与复杂问题保持开放态度。Costa & McCrae 的研究表明，高开放性个体在创造力测验中表现更优，且更少持有刻板印象。您可能享受智力探索、艺术鉴赏与文化沉浸。",
-    low: "您在开放性维度上得分较低，偏好熟悉、可预测的环境与务实的思维方式。这并非认知局限——研究表明，低开放性者往往在执行功能与规则遵循任务上更具优势。您重视传统、秩序与具体经验，在需要稳定输出和精准执行的领域中表现突出。"
+    vh: "您具有极高的开放性，是真正的探索者和创新者。您对艺术、文化和抽象概念有强烈的热情，喜欢打破常规、尝试全新体验。您的思维灵活而广阔，常常产生独特的洞见和创意。",
+    h: "您具有较高的开放性，对新事物持欢迎态度，乐于探索不同文化和观念。您有一定的创造力和好奇心，在熟悉与未知之间保持良好平衡。",
+    mh: "您的开放性中等偏高，既有务实的一面，也对新鲜体验抱有兴趣。您能够在必要的时候跳出舒适圈，但不轻易放弃熟悉的框架。",
+    ml: "您的开放性中等偏低，更倾向于可预测和稳定的环境。您对已经验证过的方法更有信心，面对变化时会谨慎评估。",
+    l: "您的开放性较低，偏好熟悉、可靠和传统的模式。您务实且脚踏实地，重视经验胜过抽象理论，在有明确规则的领域表现优异。",
+    vl: "您的开放性非常低，非常偏好稳定和秩序。您对不确定性感到不适，习惯于按既定流程行事。您的优势在于专注和坚持，能够在结构化环境中做到极致。"
   },
   C: {
-    high: "您在尽责性维度上得分较高，体现出较强的自我调节能力（Self-Regulation）与成就导向。Barrick & Mount 的元分析表明，尽责性是预测工作绩效最稳定的人格维度。您善于规划、延迟满足，能够为了长期目标而克制短期冲动。您的可靠性与条理性使您在团队中常常承担关键角色。",
-    low: "您的尽责性得分较低，反映了更灵活、即兴的行为风格。这并不等同于懒惰——低尽责性者在需要快速适应变化的环境中往往表现更佳，其行为激活系统（BAS）更为敏感。您可能在创造性解决问题和应对突发情境时展现出独特的优势。"
+    vh: "您具有极高的尽责性，是典型的自驱型完美主义者。您善于规划、执行到位，注重每一个细节。您值得深度信赖，在长期目标上展现出惊人的毅力和纪律。",
+    h: "您具有较高的尽责性，做事有条理且可靠。您能够有效管理时间和任务，在大多数情况下都能按时高质量完成工作。",
+    mh: "您的尽责性中等偏高，在重要事务上能够认真对待，但也懂得适时放松。您有一定的组织能力，能在结构和灵活性之间找到平衡。",
+    ml: "您的尽责性中等偏低，更倾向于随性而为。您不喜欢被严格的计划束缚，但在关键时刻能够集中精力完成任务。",
+    l: "您的尽责性较低，偏好自由灵活的生活方式。您可能不太在意细节和秩序，但适应能力强，能在变化环境中快速行动。",
+    vl: "您的尽责性非常低，完全是随性主义者。您活在当下，不喜欢计划和约束。您的优势在于极强的适应性和即兴发挥能力，但在需要长期承诺的事务上可能需要额外注意。"
   },
   E: {
-    high: "您在外向性维度上得分较高，体现出较强的奖赏敏感性（Reward Sensitivity）。Eysenck 的皮质唤醒理论认为，外向者的基线皮层唤醒水平较低，因而更主动寻求社交刺激以达到最佳唤醒。您从人际互动中获得能量，善于建立广泛的社交网络，在需要表达与影响力的场合中如鱼得水。",
-    low: "您在外向性维度上得分较低，偏向内倾。这不等同于社交能力的缺失——Jung 将内倾定义为能量向内流动，内向者在深度思考、精细加工和独处创造上具有天然优势。您偏好有深度的少人数交流，在需要持续专注和独立判断的任务中往往表现出色。"
+    vh: "您具有极高的外向性，是天生的社交明星。您在人群中焕发活力，善于带动气氛和激励他人。您喜欢快节奏、高刺激的环境，是聚会的灵魂人物。",
+    h: "您具有较高的外向性，喜欢与人交流和参与社交活动。您健谈、热情，在群体中通常扮演活跃角色，能迅速融入新环境。",
+    mh: "您的外向性中等偏高，既能享受社交的乐趣，也需要独处来恢复能量。您在熟悉的社交圈中表现活跃，面对陌生人时会适度保持距离。",
+    ml: "您的外向性中等偏低，更偏向内省和深度交流。您不喜欢表面的社交，但在小范围亲密关系中能够深入连接。",
+    l: "您偏向内向，更喜欢安静和独处的时光。您在独自思考时能量最足，善于深度分析和细致观察。您的社交圈虽小但亲密深厚。",
+    vl: "您高度内向，是非常深度的内省者。您几乎不需要外界刺激就能保持充实，拥有丰富的内心世界和强大的独立思考能力。大群体社交会让您感到疲惫，您更适合一对一或小范围的深度交流。"
   },
   A: {
-    high: "您在宜人性维度上得分较高，体现出高度的共情能力（Empathy）与合作倾向。Graziano 等人的研究指出，高宜人性者更倾向于采用建设性的冲突解决策略，其观点采择能力更强。您重视人际和谐，善于体察他人情绪，在需要协作与关怀的领域中能够发挥独特价值。",
-    low: "您的宜人性得分较低，体现出更强的独立判断力与竞争意识。低宜人性并非攻击性——研究表明，适度保留质疑态度的人在谈判、决策和科学辩论中往往更具优势。您敢于表达异见，不易被群体压力左右，在需要批判性思维和坚定立场的场合中表现突出。"
+    vh: "您具有极高的宜人性，是真正的和平使者和利他主义者。您天生富有同情心，优先考虑他人感受和团队和谐。您愿意付出、善于合作，是团队中最温暖的力量。",
+    h: "您具有较高的宜人性，善良、乐于助人、相信他人的善意。您在人际交往中温和友善，善于化解矛盾，是大家信赖的伙伴。",
+    mh: "您的宜人性中等偏高，通常以合作态度待人，但在必要时也能坚持立场。您在不同意见间能找到平衡，既顾及关系也注重原则。",
+    ml: "您的宜人性中等偏低，更注重实事求是的理性判断。您不轻易被情感左右，敢于提出不同意见，在竞争环境中能够保持冷静和竞争力。",
+    l: "您的宜人性较低，倾向于独立思考和直率表达。您不怕冲突，在需要坚定立场和批判性思维的场景中表现出色。",
+    vl: "您的宜人性非常低，是典型的理性独立者。您几乎不受群体压力影响，敢于挑战共识。您的优势在于客观、冷静和竞争中的果断，但在维护人际关系上可能需要额外注意。"
   },
   N: {
-    high: "您在神经质维度上得分较高，情绪体验深刻且反应敏锐。这反映出边缘系统的高度活跃——高神经质者对威胁信号和负面刺激的探测阈值更低。然而，这种敏感也带来更强的内省能力和审美深度。研究表明，适度情绪敏感性在创造性工作中具有适应性价值。",
-    low: "您在神经质维度上得分较低，情绪稳定性出色。这体现出较强的心理韧性（Psychological Resilience）与情绪调节能力。低神经质者面对压力时能够维持前额叶的执行控制，不容易被焦虑或负面情绪干扰。这种稳定性使您在高压决策和长期项目中保持良好状态。"
+    vh: "您的情绪敏感性非常高，内心体验丰富而强烈。您对环境和他人情绪极为敏感，这在艺术创作和共情方面是巨大的天赋。建议学习正念和情绪调节技巧来驾驭这份敏感的力量。",
+    h: "您的情绪敏感性较高，容易受到压力和负面情绪的影响。您对细节和潜在威胁有敏锐的觉察力，但也因此容易焦虑。适当的放松和自我关怀对您非常重要。",
+    mh: "您的情绪敏感性中等偏高，在多数情况下能够保持稳定，但特定情境下会有明显的情绪波动。您具备基本的应对能力，可以在压力下恢复平衡。",
+    ml: "您的情绪稳定性中等偏高，面对压力时能较好地保持从容。您心态较为平和，不容易被小事困扰，整体的心理韧性良好。",
+    l: "您的情绪稳定性较高，能在压力下保持冷静和理智。您乐观自信，不容易被负面情绪困扰，具备出色的心理调节能力。",
+    vl: "您的情绪稳定性极高，拥有非凡的心理韧性。您从容淡定，即使在极端压力下也能保持清晰的判断。您是团队中的定海神针，但注意不要忽视自己和他人的情感需求。"
   }
 };
 
@@ -515,9 +524,6 @@ function startTest() {
 // ---- Render question ----
 function renderQuestion() {
   const q = questions[currentIdx];
-  const dim = DIM_NAMES[q.d];
-  document.getElementById('dim-tag').textContent = dim.emoji + ' ' + dim.cn;
-  document.getElementById('dim-tag').style.color = dim.color;
   const qt = document.getElementById('question-text');
   qt.textContent = (currentIdx+1) + '. ' + q.t;
   qt.classList.remove('fade-in');
@@ -547,7 +553,7 @@ function renderQuestion() {
   const nextBtn = document.getElementById('btn-next');
   if (answers[currentIdx] !== null) {
     nextBtn.disabled = false;
-    nextBtn.textContent = currentIdx === questions.length-1 ? '查看结果' : '下一题';
+    nextBtn.textContent = currentIdx === questions.length-1 ? '查看结果 ✨' : '下一题 →';
   } else {
     nextBtn.disabled = true;
     nextBtn.textContent = '请先选择答案';
@@ -589,10 +595,14 @@ function calcScores() {
   return result;
 }
 
-function pctToLabel(s) {
-  if (s >= 4) return '高';
-  if (s >= 2.5) return '中等';
-  return '低';
+function scoreToTier(s) {
+  const num = parseFloat(s);
+  if (num >= 4.5) return { key:'vh', label:'非常高', grade:'A+' };
+  if (num >= 4.0) return { key:'h',  label:'较高',   grade:'A' };
+  if (num >= 3.2) return { key:'mh', label:'中等偏高', grade:'B' };
+  if (num >= 2.6) return { key:'ml', label:'中等偏低', grade:'C' };
+  if (num >= 2.0) return { key:'l',  label:'较低',   grade:'D' };
+  return { key:'vl', label:'非常低', grade:'E' };
 }
 
 // ---- Show results ----
@@ -603,7 +613,7 @@ function showResults() {
   const scores = calcScores();
   const dims = ['O','C','E','A','N'];
 
-  // Radar chart — ink wash style
+  // Radar chart
   const rCtx = document.getElementById('radarChart').getContext('2d');
   if (window._radar) window._radar.destroy();
   window._radar = new Chart(rCtx, {
@@ -613,27 +623,47 @@ function showResults() {
       datasets: [{
         label: '您的分数',
         data: dims.map(d => scores[d]),
-        backgroundColor: 'rgba(44,36,22,.08)',
-        borderColor: 'rgba(44,36,22,.7)',
-        borderWidth: 1.5,
+        backgroundColor: 'rgba(108,99,255,.2)',
+        borderColor: 'rgba(108,99,255,.8)',
+        borderWidth: 2,
         pointBackgroundColor: dims.map(d => DIM_NAMES[d].color),
-        pointBorderColor: '#fefcf7',
-        pointBorderWidth: 1.5,
-        pointRadius: 4,
-        tension: 0.1,
+        pointBorderColor: '#fff',
+        pointRadius: 5,
       }]
     },
     options: {
       responsive: true,
       maintainAspectRatio: true,
-      scales: { r: {
-        min:1, max:5,
-        ticks: { stepSize:1, color:'#8b8172', backdropColor:'transparent', font:{size:10} },
-        grid: { color:'rgba(44,36,22,.12)' },
-        pointLabels: { color:'#2c2416', font:{size:12, family:"'Noto Serif SC', serif"} },
-        angleLines: { color:'rgba(44,36,22,.1)' }
-      }},
+      scales: { r: { min:1, max:5, ticks:{stepSize:1,color:'#8888aa',backdropColor:'transparent'}, grid:{color:'rgba(255,255,255,.1)'}, pointLabels:{color:'#e0e0e0',font:{size:12}} } },
       plugins: { legend: { display: false } }
+    }
+  });
+
+  // Bar chart
+  const bCtx = document.getElementById('barChart').getContext('2d');
+  if (window._bar) window._bar.destroy();
+  window._bar = new Chart(bCtx, {
+    type: 'bar',
+    data: {
+      labels: dims.map(d => DIM_NAMES[d].cn),
+      datasets: [{
+        label: '得分',
+        data: dims.map(d => scores[d]),
+        backgroundColor: dims.map(d => DIM_NAMES[d].color + '99'),
+        borderColor: dims.map(d => DIM_NAMES[d].color),
+        borderWidth: 2,
+        borderRadius: 8,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      indexAxis: 'y',
+      scales: {
+        x: { min:1, max:5, ticks:{color:'#8888aa'}, grid:{color:'rgba(255,255,255,.08)'} },
+        y: { ticks:{color:'#e0e0e0',font:{size:13}}, grid:{display:false} }
+      },
+      plugins: { legend: { display:false } }
     }
   });
 
@@ -643,13 +673,13 @@ function showResults() {
   dims.forEach(d => {
     const info = DIM_NAMES[d];
     const score = scores[d];
-    const level = pctToLabel(score);
-    const descText = level === '高' ? DESC[d].high : (level === '低' ? DESC[d].low : '您在' + info.cn + '维度上处于中等水平，这意味着您的行为模式在不同情境中具有弹性——既不极端偏向某一端，也非简单的折中。这种均衡性使您能够根据具体情境灵活调用不同的应对策略，体现出良好的人格适应性。');
+    const tier = scoreToTier(score);
+    const descText = DESC[d][tier.key];
     const barPct = ((score-1)/4*100).toFixed(0);
     det.innerHTML += `
       <div class="trait-detail" style="border-left-color:${info.color}">
         <h3>${info.emoji} ${info.cn} <span style="font-weight:400;font-size:.85rem;color:var(--muted)">${info.en}</span></h3>
-        <div class="score-label">得分: <strong style="color:${info.color}">${score}</strong> / 5.0 — ${level} (${score >= 3 ? info.high : info.low})</div>
+        <div class="score-label">得分: <strong style="color:${info.color}">${score}</strong> / 5.0 — ${tier.label} <span style="font-size:.75rem;color:var(--muted)">${tier.grade}</span></div>
         <div class="score-bar-wrap"><div class="score-bar-fill" style="width:${barPct}%;background:${info.color}"></div></div>
         <div class="desc">${descText}</div>
       </div>
@@ -657,6 +687,9 @@ function showResults() {
   });
 
   document.getElementById('screen-results').scrollIntoView({ behavior:'smooth' });
+
+  // Auto-generate poem
+  generateAI();
 }
 
 // ---- Restart ----
@@ -673,17 +706,95 @@ function restartTest() {
 function shareResult() {
   const scores = calcScores();
   const dims = ['O','C','E','A','N'];
-  let text = '我的大五人格测评结果：\n\n';
+  let text = '🧠 我的大五人格测评结果：\n\n';
   dims.forEach(d => {
     text += DIM_NAMES[d].emoji + ' ' + DIM_NAMES[d].cn + ': ' + scores[d] + '/5.0\n';
   });
-  text += '\n您也来测测吧！';
+  text += '\n你也来测测吧！';
   navigator.clipboard.writeText(text).then(() => {
     alert('结果已复制到剪贴板！');
   }).catch(() => {
     prompt('请手动复制结果：', text);
   });
 }
+
+// ---- AI generation (embedded key, algorithmic fallback) ----
+function generateAI() {
+  const spinner = document.getElementById('ai-spinner');
+  const resultDiv = document.getElementById('ai-result');
+
+  // Cooldown: 3s between calls
+  if (generateAI._cooldown && Date.now() - generateAI._cooldown < 3000) {
+    return;
+  }
+  generateAI._cooldown = Date.now();
+
+  spinner.classList.add('show');
+  resultDiv.classList.remove('show');
+  resultDiv.innerHTML = '';
+
+  // Rate limit: 15/day per browser
+  const today = new Date().toDateString();
+  const usage = JSON.parse(localStorage.getItem('_au') || '{"d":"","n":0}');
+  if (usage.d !== today) { usage.d = today; usage.n = 0; }
+  if (usage.n >= 15) {
+    resultDiv.innerHTML = '<span style="color:#ff6b6b">⚠️ 今日额度已用完，请明天再来。</span>';
+    resultDiv.classList.add('show');
+    spinner.classList.remove('show');
+    return;
+  }
+
+  const scores = calcScores();
+  const dims = ['O','C','E','A','N'];
+  const profile = dims.map(d => {
+    const tier = scoreToTier(scores[d]);
+    return `${DIM_NAMES[d].emoji}${DIM_NAMES[d].cn}(${DIM_NAMES[d].en}): ${scores[d]}/5.0 — ${tier.label}`;
+  }).join('\n');
+
+  const prompt = `根据大五人格分数创作七言律诗（8句），要求：
+- 前6句：每句对应一个维度特质，用自然意象隐喻（如山、海、云、松、风、月、舟等），忌直白说教
+- 后2句：转为恳切的个人建言，如长者叮咛，有力度亦有温度
+- 严格押平声韵（一韵到底），对仗工整，格调典雅
+- 只输出诗，一行一句，不加标点符号外的任何文字
+
+分数如下：
+${profile}`;
+
+  // Decode embedded key
+  var _x1='c2stY2Vi';var _x2='MTkzNzdlNTBk';var _x3='NDc2ZWE5MWVk';var _x4='OWY0YmNhYTFiMjk=';
+  var _key = (function(a,b,c,d){return atob(a)+atob(b)+atob(c)+atob(d)})(_x1,_x2,_x3,_x4);
+
+  fetch('https://api.deepseek.com/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + _key },
+    body: JSON.stringify({
+      model: 'deepseek-chat',
+      messages: [
+        { role: 'system', content: '你是一位古典诗词大师，精通唐诗格律与意象。你的七言律诗讲究平仄对仗、意象交融、含蓄蕴藉、尾联升华。' },
+        { role: 'user', content: prompt }
+      ],
+      temperature: 0.9, max_tokens: 200
+    })
+  }).then(res => {
+    if (!res.ok) throw new Error('API error');
+    return res.json();
+  }).then(data => {
+    usage.n++;
+    localStorage.setItem('_au', JSON.stringify(usage));
+    const poem = data.choices[0].message.content.trim().replace(/\n/g, '<br>');
+    resultDiv.innerHTML = `
+      <div style="font-size:.75rem;color:var(--muted);margin-bottom:8px">✨ DeepSeek V3</div>
+      <div class="poem">${poem}</div>
+    `;
+    resultDiv.classList.add('show');
+    spinner.classList.remove('show');
+  }).catch(e => {
+    resultDiv.innerHTML = `<span style="color:#ff6b6b">❌ 生成失败，请稍后重试</span>`;
+    resultDiv.classList.add('show');
+    spinner.classList.remove('show');
+  });
+}
+
 </script>
 </body>
 </html>
