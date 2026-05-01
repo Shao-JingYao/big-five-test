@@ -14,7 +14,7 @@
     --card: #fefcf7;
     --text: #2c2416;
     --muted: #8b8172;
-    --accent: #b5342e;
+    --accent: #8b5e4b;
     --accent2: #3a5a5a;
     --o-color: #5a4a3a;
     --c-color: #3a5a5a;
@@ -36,7 +36,7 @@
     align-items: flex-start;
     padding: 40px 20px;
     background-image: 
-      radial-gradient(ellipse at 50% 0%, rgba(181,52,46,.04), transparent 60%),
+      radial-gradient(ellipse at 50% 0%, rgba(139,94,75,.03), transparent 60%),
       radial-gradient(ellipse at 80% 100%, rgba(58,90,90,.03), transparent 50%);
   }
   .container { width: 100%; max-width: 720px; position: relative; z-index: 1; }
@@ -44,7 +44,7 @@
     background: var(--card);
     border-radius: var(--radius);
     padding: 48px 40px;
-    box-shadow: var(--shadow);
+    box-shadow: 0 1px 12px rgba(44,36,22,.06), 0 0 1px rgba(44,36,22,.04);
     border: 1px solid var(--ink-border);
     position: relative;
   }
@@ -53,16 +53,16 @@
     font-size: 2.4rem;
     text-align: center;
     color: var(--text);
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     font-weight: 400;
-    letter-spacing: .05em;
+    letter-spacing: .06em;
   }
   .subtitle {
     text-align: center;
     color: var(--muted);
-    font-size: .9rem;
+    font-size: .85rem;
     margin-bottom: 36px;
-    letter-spacing: .08em;
+    letter-spacing: .1em;
   }
   .intro-text {
     color: var(--muted);
@@ -90,8 +90,8 @@
     position: absolute;
     right: 10px; top: 10px;
     width: 16px; height: 16px;
-    border: 1.5px solid var(--accent);
-    opacity: .35;
+    border: 1.5px solid var(--muted);
+    opacity: .25;
     transform: rotate(15deg);
   }
   .trait-chip .emoji { font-size: 1.4rem; display:block; margin-bottom: 6px; }
@@ -99,28 +99,44 @@
   .trait-chip .en   { font-size: .72rem; color: var(--muted); }
   .btn {
     display: inline-block;
-    padding: 12px 36px;
-    border: 1px solid var(--text);
-    border-radius: 2px;
-    font-size: .95rem;
+    padding: 11px 32px;
+    border: 1px solid var(--ink-border);
+    border-radius: 3px;
+    font-size: .92rem;
     font-weight: 400;
     cursor: pointer;
-    transition: all .25s;
+    transition: all .3s ease;
     text-decoration: none;
     background: transparent;
-    color: var(--text);
+    color: var(--muted);
     font-family: inherit;
-    letter-spacing: .04em;
+    letter-spacing: .06em;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--text);
+    opacity: 0;
+    transition: opacity .3s ease;
+    z-index: 0;
   }
   .btn-primary {
     background: var(--text);
     color: var(--card);
     border-color: var(--text);
   }
-  .btn-primary:hover { background: var(--accent); border-color: var(--accent); }
+  .btn-primary:hover { background: #1a1510; border-color: #1a1510; }
+  .btn-primary:hover::after { opacity: 0; }
   .btn-secondary { border-color: var(--ink-border); color: var(--muted); }
-  .btn-secondary:hover { border-color: var(--text); color: var(--text); }
-  .btn-sm { padding: 10px 24px; font-size: .85rem; }
+  .btn-secondary:hover {
+    border-color: var(--text);
+    color: var(--text);
+    background: rgba(44,36,22,.03);
+  }
+  .btn-sm { padding: 8px 22px; font-size: .82rem; }
   .btn-center { text-align: center; margin-top: 12px; }
   .progress-wrap { margin-bottom: 24px; }
   .progress-bar-bg {
@@ -156,23 +172,28 @@
   }
   .likert-btn {
     flex: 1;
-    padding: 14px 4px;
-    border-radius: 2px;
-    border: 1px solid var(--ink-border);
-    background: transparent;
+    padding: 13px 4px;
+    border-radius: 3px;
+    border: 1px solid transparent;
+    background: rgba(44,36,22,.03);
     color: var(--muted);
     cursor: pointer;
-    font-size: .82rem;
-    transition: all .2s;
+    font-size: .8rem;
+    transition: all .25s ease;
     text-align: center;
     font-family: inherit;
+    letter-spacing: .04em;
   }
-  .likert-btn:hover { border-color: var(--text); color: var(--text); background: rgba(44,36,22,.04); }
+  .likert-btn:hover {
+    background: rgba(44,36,22,.07);
+    color: var(--text);
+    border-color: var(--ink-border);
+  }
   .likert-btn.selected {
     background: var(--text);
-    border-color: var(--text);
     color: var(--card);
     font-weight: 600;
+    border-color: var(--text);
   }
   .nav-btns {
     display: flex;
@@ -192,10 +213,10 @@
   .results-header h2::after {
     content: '';
     display: block;
-    width: 40px; height: 2px;
+    width: 40px; height: 1.5px;
     background: var(--accent);
-    margin: 12px auto 0;
-    opacity: .5;
+    margin: 14px auto 0;
+    opacity: .4;
   }
   .chart-box {
     background: var(--card);
@@ -234,25 +255,24 @@
     z-index: 0;
     background-image:
       url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
-    opacity: .6;
+    opacity: .5;
   }
   #screen-welcome::before {
     content: '';
     position: absolute;
-    top: -1px; left: 20px; right: 20px;
+    top: -1px; left: 24px; right: 24px;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(44,36,22,.15), transparent);
+    background: linear-gradient(90deg, transparent, rgba(44,36,22,.1), transparent);
   }
   #screen-welcome::after {
     content: '';
     position: absolute;
-    bottom: -1px; left: 20px; right: 20px;
+    bottom: -1px; left: 24px; right: 24px;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(44,36,22,.1), transparent);
+    background: linear-gradient(90deg, transparent, rgba(44,36,22,.06), transparent);
   }
-  .likert-btn:active { background: rgba(44,36,22,.08); }
 
-  /* AI poem section — ink wash style */
+  /* AI poem section */
   .ai-section {
     margin-top: 32px;
     padding: 24px;
@@ -260,7 +280,7 @@
     border-radius: var(--radius);
     border: 1px solid var(--ink-border);
   }
-  .ai-section h3 { font-size:1.05rem; margin-bottom:12px; display:flex; align-items:center; gap:8px; color:var(--text); font-weight:400; }
+  .ai-section h3 { font-size:1rem; margin-bottom:12px; display:flex; align-items:center; gap:8px; color:var(--muted); font-weight:400; }
   .ai-result {
     margin-top: 16px;
     padding: 24px;
@@ -285,15 +305,16 @@
   }
   .ai-result .poem-author {
     text-align: right;
-    font-size: .8rem;
+    font-size: .78rem;
     color: var(--muted);
-    margin-top: 12px;
+    margin-top: 14px;
+    letter-spacing: .06em;
   }
   .spinner {
     display: none;
-    width: 18px; height: 18px;
+    width: 16px; height: 16px;
     border: 2px solid var(--ink-border);
-    border-top-color: var(--text);
+    border-top-color: var(--muted);
     border-radius: 50%;
     animation: spin .6s linear infinite;
   }
